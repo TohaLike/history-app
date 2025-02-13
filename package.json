@@ -1,18 +1,19 @@
 {
   "name": "frontend-app",
   "version": "1.0.0",
-  "main": "index.js",
+  "private": true,
   "scripts": {
     "start": "webpack serve --mode development",
     "build": "webpack --mode production"
   },
   "keywords": [],
-  "author": "",
+  "author": "Anton Malyshev",
   "license": "ISC",
   "description": "",
   "dependencies": {
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.1.5"
   },
   "devDependencies": {
     "@babel/core": "^7.26.8",

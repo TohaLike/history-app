@@ -1,7 +1,17 @@
 import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router";
+import Home from "./page";
 
 const App: React.FC = () => {
-  return <h1>Hello, + Webpack!</h1>;
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />}>
+          
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
 };
 
 export default App;
