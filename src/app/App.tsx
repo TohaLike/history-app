@@ -1,13 +1,14 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router";
 import Home from "./page";
+import Layout from "./layout";
 
 const App: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />}>
-          
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
         </Route>
       </Routes>
     </BrowserRouter>

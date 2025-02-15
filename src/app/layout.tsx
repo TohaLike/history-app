@@ -1,14 +1,12 @@
-import React from "react";
+import { Outlet } from "react-router-dom";
+import "./global.scss";
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function Layout() {
   return (
     <html lang="en">
-      asfas
-      <body>{children}</body>
+      <body>
+        <Outlet />
+      </body>
     </html>
   );
 }
