@@ -3,10 +3,7 @@ import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import { Configuration } from "webpack";
 import { BuildOptions } from "./types/types";
 
-export function buildPlugins(
-  options: BuildOptions
-): Configuration["plugins"] {
-  const isDev = options.mode === "development";
+export function buildPlugins(options: BuildOptions): Configuration["plugins"] {
   const isProd = options.mode === "production";
 
   const plugins: Configuration["plugins"] = [

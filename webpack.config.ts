@@ -1,19 +1,15 @@
 import path from "path";
 import webpack from "webpack";
-import { fileURLToPath } from "url";
-// import { BuildMode, BuildPaths } from "./config/types/types";
 import { buildWebpack } from "./config/build/buildWebpack";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import { BuildMode, BuildPaths } from "config/build/types/types";
 
 interface EnvVariables {
-  mode: any;
+  mode: BuildMode;
   port: number;
 }
 
 export default (env: EnvVariables) => {
-  const paths: any = {
+  const paths: BuildPaths = {
     output: path.resolve(__dirname, "build"),
     entry: path.resolve(__dirname, "src/app", "index.tsx"),
     html: path.resolve(__dirname, "public", "index.html"),

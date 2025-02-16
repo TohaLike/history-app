@@ -3,10 +3,14 @@ import "./global.scss";
 
 export default function Layout() {
   return (
-    <html lang="en">
-      <body>
+    <>
+      {/* <html lang="en"> */}
+      {/* <body> */}
+      <main>
         <Outlet />
-      </body>
-    </html>
+      </main>
+      {/* </body> */}
+      {/* </html> */}
+    </>
   );
 }

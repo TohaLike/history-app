@@ -7,7 +7,7 @@ export default function buildDevServer(options: BuildOptions): DevServerConfigur
     // compress: true,
     port: options.port ?? 3000,
     open: true,
-    hot: true,
+    // hot: true,
     // historyApiFallback: true,
   };
 }
