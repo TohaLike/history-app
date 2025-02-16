@@ -15,8 +15,11 @@ export function buildLoaders(options: BuildOptions): ModuleOptions["rules"] {
     loader: "css-loader",
     options: {
       modules: {
+        mode: "local",
         localIdentName: isDev ? "[path][name]__[local]" : "[hash:base64:8]",
       },
+      importLoaders: 1,
+      esModule: false,
     },
   };
 
