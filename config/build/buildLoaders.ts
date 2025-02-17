@@ -17,6 +17,7 @@ export function buildLoaders(options: BuildOptions): ModuleOptions["rules"] {
       modules: {
         mode: "local",
         localIdentName: isDev ? "[path][name]__[local]" : "[hash:base64:8]",
+        exportLocalsConvention: "asIs",
       },
       importLoaders: 1,
       esModule: false,
