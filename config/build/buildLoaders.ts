@@ -33,10 +33,15 @@ export function buildLoaders(options: BuildOptions): ModuleOptions["rules"] {
     ],
   };
 
+  const cssLoader = {
+    test: /\.css$/i,
+    use: ["style-loader", "css-loader"],
+  };
+
   const imgLoader = {
     test: /\.(png|jpg|gif|svg)$/,
     type: "asset/resource",
   };
 
-  return [imgLoader, scssLoader, tsxLoader];
+  return [imgLoader, cssLoader, scssLoader, tsxLoader];
 }

@@ -12,6 +12,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@gsap/react": "^2.1.2",
     "file-type": "^20.1.0",
     "link": "^2.1.1",
     "react": "^19.0.0",

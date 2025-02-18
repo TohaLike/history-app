@@ -1,45 +1,180 @@
-import { useEffect, useRef, useState } from "react";
-import classes from "./home.module.scss";
+import { createRef, useEffect, useRef, useState } from "react";
+import style from "./home.module.scss";
 import gsap from "gsap";
 import { Swiper, SwiperSlide } from "swiper/react";
-// import "swiper/css";
+import { Navigation, Pagination } from "swiper/modules";
+import { MotionPathPlugin } from "gsap/MotionPathPlugin";
+import { useGSAP } from "@gsap/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import { YEARS_2015_2022 } from "../../years";
+
+gsap.registerPlugin(MotionPathPlugin);
 
 const Home: React.FC = () => {
-  const slides = [
-    "Наука",
-    "История",
-    "Искусство",
-    "Музыка",
-    "Спорт",
-    "Технологии",
-  ];
-  const radius = 200; // Радиус окружности
-  const centerX = 250; // Центр окружности (X)
-  const centerY = 250; // Центр окружности (Y)
-  const itemsRef = useRef<(HTMLDivElement | null)[]>([]);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const itemsRef = useRef<HTMLDivElement[]>([]);
+  const wrapperRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    itemsRef.current.forEach((el, i) => {
-      if (el) {
-        const angle = (i / slides.length) * Math.PI * 2; // Угол для размещения элемента
-        const x = centerX + radius * Math.cos(angle);
-        const y = centerY + radius * Math.sin(angle);
-        gsap.to(el, { x, y, duration: 0.5, ease: "power2.out" });
-      }
-    });
-  }, []);
+  const tl = useRef<gsap.core.Timeline | null>(null);
+
+  const lengthOfItems = 6;
+
+  const step = 1 / lengthOfItems;
+  const wrapProgress = gsap.utils.wrap(0, 1);
+  const snap = gsap.utils.snap(step);
+
+  useGSAP(
+    () => {
+      const circlePath = MotionPathPlugin.convertToPath("#holder", false)[0];
+      circlePath.id = "circlePath";
+
+      document.querySelector("svg")?.prepend(circlePath);
+
+      gsap.set(itemsRef.current, {
+        motionPath: {
+          path: circlePath,
+          align: circlePath,
+          alignOrigin: [0.5, 0.5],
+          end: (i: number) => i / itemsRef.current.length,
+        },
+        scale: 1,
+      });
+
+      tl.current = gsap.timeline({ paused: true });
+
+      tl.current.to(wrapperRef.current, {
+        rotation: 360,
+        transformOrigin: "center",
+        duration: 1,
+        ease: "none",
+      });
+
+      tl.current.to(
+        itemsRef.current,
+        {
+          rotation: "-=360",
+          transformOrigin: "center",
+          duration: 1,
+          ease: "none",
+        },
+        0
+      );
+    },
+
+    // document.querySelector('.item.active').classList.remove('active');
+    // items[activeItem].classList.add('active');
+
+    // var diff = current - i;
+
+    // if (Math.abs(diff) < numItems / 2) {
+    //   moveWheel(diff * itemStep);
+    // } else {
+    //   var amt = numItems - Math.abs(diff);
+
+    //   if (current > i) {
+    //     moveWheel(amt * -itemStep);
+    //   } else {
+    //     moveWheel(amt * itemStep);
+    //   }
+    // }
+
+    { scope: wrapperRef }
+  );
+
+  const handleNext = () => {
+    if (tl.current) {
+      gsap.to(tl.current, {
+        progress: snap(tl.current.progress() + step),
+        modifiers: {
+          progress: wrapProgress,
+        },
+      });
+    }
+  };
+
+  const handlePrev = () => {
+    if (tl.current) {
+      gsap.to(tl.current, {
+        progress: snap(tl.current.progress() - step),
+        modifiers: {
+          progress: wrapProgress,
+        },
+      });
+    }
+  };
+
+  console.log(YEARS_2015_2022);
 
   return (
     <>
       <div>
-        <div className={classes.container}>
-          <div className={classes.title__container}>
-            <span className={classes.line}></span>
-            <h1 className={classes.title}>Исторические даты</h1>
+        <div className={style.container}>
+          <div className={style.title__container}>
+            <span className={style.line}></span>
+            <h1 className={style.title}>Исторические даты</h1>
           </div>
 
-          
+          {/* Круг с годами */}
+          <div className={style.circular__container}>
+            <div className={style.circular__carousel}>
+              <div className={style.wrapper} ref={wrapperRef}>
+                <div className={style.items}>
+                  {[...Array(lengthOfItems)].map((_, i) => (
+                    <div
+                      key={i}
+                      className={style.item}
+                      ref={(el: any) => el && (itemsRef.current[i] = el)}
+                    >
+                      <div className={style.item__content}>{i + 1}</div>
+                    </div>
+                  ))}
+                </div>
+
+                <svg viewBox="0 0 300 300">
+                  <circle
+                    id="holder"
+                    className={style.st}
+                    cx="151"
+                    cy="151"
+                    r="150"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div className={style.actions__container}>
+            <div
+              className={style.buttons__container}
+              style={{ textAlign: "center" }}
+            >
+              <button onClick={handlePrev}>Prev</button>
+              <button onClick={handleNext}>Next</button>
+            </div>
+
+            <div className={style.swiper__container}>
+              <Swiper
+                slidesPerView={3.5}
+                spaceBetween={80}
+                pagination={{
+                  clickable: true,
+                }}
+                modules={[Pagination]}
+                className="mySwiper"
+              >
+                {YEARS_2015_2022.map((e: any, i) => (
+                  <SwiperSlide
+                    style={{ maxWidth: "320px" }}
+                    className={style.swiper__slide}
+                  >
+                    <h2 className={style.swiper__year}>{e.year}</h2>
+                    <p className={style.swiper__description}>{e.description}</p>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
+          </div>
         </div>
       </div>
     </>
