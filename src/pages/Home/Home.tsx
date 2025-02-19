@@ -5,10 +5,12 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 import { useGSAP } from "@gsap/react";
-import { YEARS } from "../../years";
+import { YEARS } from "@/years";
 import "swiper/css";
 import "swiper/css/navigation";
-
+import { SwiperItemProps } from "@/types";
+import { LeftArrowIcon } from "@/shared/assets/LeftArrowIcon";
+import { RightArrowIcon } from "@/shared/assets/RigthArrowIcon";
 
 gsap.registerPlugin(MotionPathPlugin);
 
@@ -147,10 +149,13 @@ const Home: React.FC = () => {
           <div className={style.circular__container}>
             <div className={style.year__container}>
               <span className={style.year__first}>
-                {YEARS[currentYear][0].year}
+                {YEARS[currentYear].data[0].year}
               </span>
               <span className={style.year__last}>
-                {YEARS[currentYear][YEARS[currentYear].length - 1].year}
+                {
+                  YEARS[currentYear].data[YEARS[currentYear].data.length - 1]
+                    .year
+                }
               </span>
             </div>
             <div className={style.circular__carousel}>
@@ -188,13 +193,24 @@ const Home: React.FC = () => {
           </div>
 
           <div className={style.actions__container}>
-            <div className={style.buttons__container}>
-              <button className={style.button__prev} onClick={handlePrev}>
-                Prev
-              </button>
-              <button className={style.button__prev} onClick={handleNext}>
-                Next
-              </button>
+            <div>
+              <div className={style.current__year}>
+                <span>
+                  {`${[currentYear + 1]
+                    .toString()
+                    .padStart(2, "0")}/${YEARS.length
+                    .toString()
+                    .padStart(2, "0")}`}
+                </span>
+              </div>
+              <div className={style.buttons__container}>
+                <button className={style.button} onClick={handleNext}>
+                  <LeftArrowIcon />
+                </button>
+                <button className={style.button} onClick={handlePrev}>
+                  <RightArrowIcon />
+                </button>
+              </div>
             </div>
 
             <div className={style.swiper__container}>
@@ -205,18 +221,21 @@ const Home: React.FC = () => {
                   clickable: true,
                 }}
                 modules={[Pagination]}
-                className="mySwiper"
               >
-                {YEARS[currentYear].map((e: any, i: number) => (
-                  <SwiperSlide
-                    key={`slide-${i}`}
-                    style={{ maxWidth: "320px" }}
-                    className={style.swiper__slide}
-                  >
-                    <h2 className={style.swiper__year}>{e.year}</h2>
-                    <p className={style.swiper__description}>{e.description}</p>
-                  </SwiperSlide>
-                ))}
+                {YEARS[currentYear].data.map(
+                  (e: SwiperItemProps, i: number) => (
+                    <SwiperSlide
+                      key={`slide-${i}`}
+                      style={{ maxWidth: "320px" }}
+                      className={style.swiper__slide}
+                    >
+                      <h2 className={style.swiper__year}>{e.year}</h2>
+                      <p className={style.swiper__description}>
+                        {e.description}
+                      </p>
+                    </SwiperSlide>
+                  )
+                )}
               </Swiper>
             </div>
           </div>
@@ -227,3 +246,11 @@ const Home: React.FC = () => {
 };
 
 export default Home;
+
+{
+  /* <SwiperItem
+key={`swiper-item-${i}`}
+year={e.year}
+description={e.description}
+/> */
+}

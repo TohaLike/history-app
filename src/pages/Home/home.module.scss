@@ -69,17 +69,16 @@
   }
 
   &__first {
-    color: #5E5FEF;
+    color: #5e5fef;
   }
 
   &__last {
-    color: #EF5DA8;
+    color: #ef5da8;
   }
-
 }
 
 .circular__container {
-  height: 530px;
+  height: 460px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -114,6 +113,7 @@
 
   &__content {
     display: none;
+    transition: 0.4s ease;
   }
 }
 
@@ -168,19 +168,41 @@ svg {
   box-sizing: border-box;
 }
 
+.current__year span {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18.12px;
+  color: #42567a;
+}
+
 .buttons__container {
   display: flex;
-  justify-content: flex-start;
+  align-items: center;
+  margin: 20px 0 0;
+  gap: 20px;
+}
+
+.button {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 200px;
+  border: 1px solid #42567a;
+  background-color: transparent;
+  cursor: pointer;
+  svg {
+    z-index: 100;
+    width: 12px;
+    height: 15px;
+  }
 }
 
 .swiper__container {
   margin: 56px 0 0;
   // height: 400px;
 }
-
-// .swiper__slide {
-//   height: 135px;
-// }
 
 .swiper__year {
   font-family: "Bebas Neue";
