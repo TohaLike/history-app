@@ -55,8 +55,34 @@
   background: linear-gradient(180deg, #3877ee -5%, #ef5da8 85%);
 }
 
+.year {
+  &__container {
+    display: flex;
+    gap: 100px;
+  }
+
+  &__container span {
+    font-weight: 700;
+    font-size: 200px;
+    line-height: 160px;
+    text-align: center;
+  }
+
+  &__first {
+    color: #5E5FEF;
+  }
+
+  &__last {
+    color: #EF5DA8;
+  }
+
+}
+
 .circular__container {
   height: 530px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .circular__carousel {
@@ -107,11 +133,20 @@
 }
 
 .item__active {
-  width: 56px;
+  min-width: 56px;
+  max-height: 56px;
   height: 56px;
   background-color: #f4f5f9;
   border: 1px solid #42567a;
   border-radius: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 30px;
+  color: #42567a;
 }
 
 svg {
@@ -128,9 +163,6 @@ svg {
   stroke-miterlimit: 1;
 }
 
-
-
-
 .actions__container {
   padding: 0 80px;
   box-sizing: border-box;
@@ -140,8 +172,6 @@ svg {
   display: flex;
   justify-content: flex-start;
 }
-
-
 
 .swiper__container {
   margin: 56px 0 0;
@@ -154,7 +184,7 @@ svg {
 
 .swiper__year {
   font-family: "Bebas Neue";
-  color: #3877EE;
+  color: #3877ee;
   font-weight: 400;
   font-size: 25px;
   line-height: 30px;
@@ -162,7 +192,7 @@ svg {
 
 .swiper__description {
   margin: 15px 0 0;
-  color: #42567A;
+  color: #42567a;
   font-weight: 400;
   font-size: 20px;
   line-height: 30px;
