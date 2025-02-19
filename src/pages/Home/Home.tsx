@@ -1,13 +1,14 @@
-import { createRef, useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import style from "./home.module.scss";
 import gsap from "gsap";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 import { useGSAP } from "@gsap/react";
+import { YEARS } from "../../years";
 import "swiper/css";
 import "swiper/css/navigation";
-import { YEARS_2015_2022 } from "../../years";
+
 
 gsap.registerPlugin(MotionPathPlugin);
 
@@ -73,8 +74,10 @@ const Home: React.FC = () => {
           ease: "none",
           modifiers: {
             item(value: number) {
-              const newItem =  wrapTracker(lengthOfItems - 1 - Math.round(value))
-              setCurrentYear(newItem)
+              const newItem = wrapTracker(
+                lengthOfItems - 1 - Math.round(value)
+              );
+              setCurrentYear(newItem);
               return newItem;
             },
           },
@@ -107,18 +110,10 @@ const Home: React.FC = () => {
       });
     }
   };
-    function moveWheel(amount: any) {
-    gsap.to(tl.current, {
-      progress: snap(tl.current.progress() + amount),
-      modifiers: {
-        progress: wrapProgress
-      }
-    });
-  }
 
   const handleMove = (index: number) => {
     if (index === currentYear) return;
-  
+
     let diff = currentYear - index;
     let newProgress;
 
@@ -130,7 +125,7 @@ const Home: React.FC = () => {
         tl.current.progress() + (currentYear > index ? -amt * step : amt * step)
       );
     }
-  
+
     gsap.to(tl.current, {
       progress: newProgress,
       modifiers: {
@@ -138,7 +133,6 @@ const Home: React.FC = () => {
       },
     });
   };
-
 
   return (
     <>
@@ -152,8 +146,12 @@ const Home: React.FC = () => {
           {/* Круг с годами */}
           <div className={style.circular__container}>
             <div className={style.year__container}>
-              <span className={style.year__first}>2015</span>
-              <span className={style.year__last}>2022</span>
+              <span className={style.year__first}>
+                {YEARS[currentYear][0].year}
+              </span>
+              <span className={style.year__last}>
+                {YEARS[currentYear][YEARS[currentYear].length - 1].year}
+              </span>
             </div>
             <div className={style.circular__carousel}>
               <div className={style.wrapper} ref={wrapperRef}>
@@ -209,7 +207,7 @@ const Home: React.FC = () => {
                 modules={[Pagination]}
                 className="mySwiper"
               >
-                {YEARS_2015_2022.map((e: any, i: number) => (
+                {YEARS[currentYear].map((e: any, i: number) => (
                   <SwiperSlide
                     key={`slide-${i}`}
                     style={{ maxWidth: "320px" }}
@@ -229,19 +227,3 @@ const Home: React.FC = () => {
 };
 
 export default Home;
-// document.querySelector('.item.active').classList.remove('active');
-// items[activeItem].classList.add('active');
-
-// var diff = current - i;
-
-// if (Math.abs(diff) < numItems / 2) {
-//   moveWheel(diff * itemStep);
-// } else {
-//   var amt = numItems - Math.abs(diff);
-
-//   if (current > i) {
-//     moveWheel(amt * -itemStep);
-//   } else {
-//     moveWheel(amt * itemStep);
-//   }
-// }
