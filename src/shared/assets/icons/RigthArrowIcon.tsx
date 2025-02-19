@@ -9,7 +9,7 @@ export const RightArrowIcon: React.FC = () => (
     <path
       d="M1.50012 0.750001L7.75012 7L1.50012 13.25"
       stroke="#42567A"
-      stroke-width="2"
+      strokeWidth="2"
     />
   </svg>
 );

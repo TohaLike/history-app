@@ -1,5 +1,3 @@
-
-
 export const LeftArrowIcon: React.FC = () => (
   <svg
     width="10px"

@@ -1,16 +1,11 @@
 import { useRef, useState } from "react";
 import style from "./home.module.scss";
 import gsap from "gsap";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from "swiper/modules";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 import { useGSAP } from "@gsap/react";
 import { YEARS } from "@/years";
-import "swiper/css";
-import "swiper/css/navigation";
-import { SwiperItemProps } from "@/types";
-import { LeftArrowIcon } from "@/shared/assets/LeftArrowIcon";
-import { RightArrowIcon } from "@/shared/assets/RigthArrowIcon";
+import { LeftArrowIcon, RightArrowIcon } from "@/shared/assets/icons";
+import { Swiper } from "@/shared/ui";
 
 gsap.registerPlugin(MotionPathPlugin);
 
@@ -19,6 +14,7 @@ const Home: React.FC = () => {
 
   const itemsRef = useRef<HTMLDivElement[]>([]);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const swiperRef = useRef<any>(null);
 
   const tl = useRef<gsap.core.Timeline | null>(null);
 
@@ -136,6 +132,7 @@ const Home: React.FC = () => {
     });
   };
 
+
   return (
     <>
       <div>
@@ -214,29 +211,7 @@ const Home: React.FC = () => {
             </div>
 
             <div className={style.swiper__container}>
-              <Swiper
-                slidesPerView={3.5}
-                spaceBetween={80}
-                pagination={{
-                  clickable: true,
-                }}
-                modules={[Pagination]}
-              >
-                {YEARS[currentYear].data.map(
-                  (e: SwiperItemProps, i: number) => (
-                    <SwiperSlide
-                      key={`slide-${i}`}
-                      style={{ maxWidth: "320px" }}
-                      className={style.swiper__slide}
-                    >
-                      <h2 className={style.swiper__year}>{e.year}</h2>
-                      <p className={style.swiper__description}>
-                        {e.description}
-                      </p>
-                    </SwiperSlide>
-                  )
-                )}
-              </Swiper>
+              <Swiper currentSlideList={currentYear} />
             </div>
           </div>
         </div>
@@ -247,10 +222,4 @@ const Home: React.FC = () => {
 
 export default Home;
 
-{
-  /* <SwiperItem
-key={`swiper-item-${i}`}
-year={e.year}
-description={e.description}
-/> */
-}
+

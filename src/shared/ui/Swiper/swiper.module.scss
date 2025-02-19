@@ -1,0 +1,38 @@
+.swiper__container {
+  margin: 56px 0 0;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.swiper__year {
+  font-family: "Bebas Neue";
+  color: #3877ee;
+  font-weight: 400;
+  font-size: 25px;
+  line-height: 30px;
+}
+
+.swiper__description {
+  margin: 15px 0 0;
+  color: #42567a;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 30px;
+}
+
+.button {
+  &__prev {
+    position: absolute;
+    top: 50%;
+    left: -60px;
+    transform: translate(0, -50%);
+  }
+
+  &__next {
+    position: absolute;
+    top: 50%;
+    right: -60px;
+    transform: translate(0, -50%);
+  }
+}
