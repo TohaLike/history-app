@@ -1,13 +1,15 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import style from "./swiper.module.scss";
 import { Swiper as MainSwiper, SwiperSlide } from "swiper/react";
 import { Swiper as SwiperProps } from "swiper/types";
 import { SwiperItemProps } from "@/types";
 import { LeftArrowIcon, RightArrowIcon } from "@/shared/assets/icons";
 import { SwiperButton } from "../SwiperButton/SwiperButton";
+import { Pagination } from "swiper/modules";
 import { AppContext } from "@/app/App";
 import { motion } from "framer-motion";
 import "swiper/css";
+import "swiper/css/pagination";
 
 import { YEARS } from "@/years";
 
@@ -17,6 +19,9 @@ export const Swiper: React.FC = () => {
   const [isSwiper, setIsSwiper] = useState<SwiperProps>(null);
   const [isEnd, setIsEnd] = useState<boolean>(false);
   const [isBeginning, setIsBeginning] = useState<boolean>(false);
+  const [paginationEnabled, setPaginationEnabled] = useState<boolean>(false);
+
+  const paginationRef = useRef(null);
 
   const nextSlide = () => {
     swiperRef?.current.swiper.slideNext();
@@ -25,6 +30,19 @@ export const Swiper: React.FC = () => {
   const prevSlide = () => {
     swiperRef?.current.swiper.slidePrev();
   };
+
+  useEffect(() => {
+    const handleResize = () => {
+      setPaginationEnabled(window.innerWidth <= 1090);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const swiperKey = `swiper-${paginationEnabled}`;
 
   return (
     <motion.div
@@ -44,11 +62,16 @@ export const Swiper: React.FC = () => {
           </div>
 
           <MainSwiper
+            key={swiperKey}
             ref={swiperRef}
-            slidesPerView={2}
+            slidesPerView={"auto"}
             spaceBetween={30}
+            modules={[Pagination]}
+            pagination={paginationEnabled ? { clickable: true } : false}
             breakpoints={{
-              1090: { slidesPerView: 3.5, spaceBetween: 80 },
+              1090: {
+                spaceBetween: 80,
+              },
             }}
           >
             {YEARS[currentYear].data.map((e: SwiperItemProps, i: number) => (
@@ -61,6 +84,8 @@ export const Swiper: React.FC = () => {
                 <p className={style.swiper__description}>{e.description}</p>
               </SwiperSlide>
             ))}
+
+            <div ref={paginationRef} style={{ margin: "100px 0 0" }}></div>
           </MainSwiper>
 
           <div className={style.button__next}>
