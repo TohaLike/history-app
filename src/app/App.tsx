@@ -8,10 +8,23 @@ export const AppContext = createContext(null);
 
 const App: React.FC = () => {
   const [currentYear, setCurrentYear] = useState<number>(5);
+  const [themeChanged, setThemeChanged] = useState<boolean>(false);
+  const [isCircleAnimationComplete, setIsCircleAnimationComplete] =
+    useState<boolean>(true);
   const swiperRef = useRef<SwiperRef>(null);
 
   return (
-    <AppContext.Provider value={{ currentYear, setCurrentYear, swiperRef }}>
+    <AppContext.Provider
+      value={{
+        currentYear,
+        setCurrentYear,
+        swiperRef,
+        themeChanged,
+        setThemeChanged,
+        isCircleAnimationComplete,
+        setIsCircleAnimationComplete,
+      }}
+    >
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />}>

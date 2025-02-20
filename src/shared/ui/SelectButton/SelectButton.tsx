@@ -4,7 +4,7 @@ import { ButtonProps } from "@/types";
 
 export const SelectButton: React.FC<ButtonProps> = ({ onClick, icon, disabled }) => {
   return (
-    <button className={style.button} onClick={onClick} disabled={disabled}>
+    <button className={style.select__button} onClick={onClick} disabled={disabled}>
       {icon}
     </button>
   );

@@ -11,7 +11,12 @@ import { YEARS } from "@/years";
 gsap.registerPlugin(MotionPathPlugin);
 
 export const SelectCategory: React.FC = () => {
-  const { currentYear, setCurrentYear, swiperRef } = useContext(AppContext);
+  const {
+    currentYear,
+    setCurrentYear,
+    setThemeChanged,
+    setIsCircleAnimationComplete,
+  } = useContext(AppContext);
 
   const itemsRef = useRef<HTMLDivElement[]>([]);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -83,18 +88,24 @@ export const SelectCategory: React.FC = () => {
         0
       );
     },
+    
 
     { scope: wrapperRef }
   );
 
   const handlePrev = () => {
     if (tl.current) {
-      swiperRef?.current.swiper.slideTo(0);
+      setIsCircleAnimationComplete(false);
+      setThemeChanged(true);
 
       gsap.to(tl.current, {
         progress: snap(tl.current.progress() + step),
         modifiers: {
           progress: wrapProgress,
+        },
+        onComplete: () => {
+          setIsCircleAnimationComplete(true);
+          setThemeChanged(false);
         },
       });
     }
@@ -102,12 +113,17 @@ export const SelectCategory: React.FC = () => {
 
   const handleNext = () => {
     if (tl.current) {
-      swiperRef?.current.swiper.slideTo(0);
+      setIsCircleAnimationComplete(false);
+      setThemeChanged(true);
 
       gsap.to(tl.current, {
         progress: snap(tl.current.progress() - step),
         modifiers: {
           progress: wrapProgress,
+        },
+        onComplete: () => {
+          setIsCircleAnimationComplete(true);
+          setThemeChanged(false);
         },
       });
     }
@@ -116,7 +132,8 @@ export const SelectCategory: React.FC = () => {
   const handleMove = (index: number) => {
     if (index === currentYear) return;
 
-    swiperRef?.current.swiper.slideTo(0);
+    setThemeChanged(true);
+    setIsCircleAnimationComplete(false);
 
     let diff = currentYear - index;
     let newProgress;
@@ -132,8 +149,10 @@ export const SelectCategory: React.FC = () => {
 
     gsap.to(tl.current, {
       progress: newProgress,
-      modifiers: {
-        progress: wrapProgress,
+      modifiers: { progress: wrapProgress },
+      onComplete: () => {
+        setIsCircleAnimationComplete(true);
+        setThemeChanged(false);
       },
     });
   };
@@ -166,13 +185,19 @@ export const SelectCategory: React.FC = () => {
                   key={i}
                   onClick={() => handleMove(i)}
                   className={style.item}
-                  ref={(el: any) => el && (itemsRef.current[i] = el)}
+                  ref={(el) => {
+                    if (el) itemsRef.current[i] = el;
+                  }}
                 >
-                  {currentYear === i ? (
-                    <div className={style.item__active}>{i + 1}</div>
-                  ) : (
-                    <div className={style.item__content}>{i + 1}</div>
-                  )}
+                  <div
+                    className={
+                      i === currentYear
+                        ? style.item__active
+                        : style.item__content
+                    }
+                  >
+                    {i + 1}
+                  </div>
                 </div>
               ))}
             </div>

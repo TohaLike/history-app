@@ -1,4 +1,4 @@
-.button {
+.select__button {
   width: 50px;
   height: 50px;
   display: flex;
@@ -8,10 +8,16 @@
   border: 1px solid #42567a;
   background-color: transparent;
   cursor: pointer;
-  
+
   svg {
     z-index: 100;
     width: 12px;
     height: 15px;
   }
 }
+
+.button:disabled,
+button[disabled] {
+  opacity: 0.4;
+}
+
