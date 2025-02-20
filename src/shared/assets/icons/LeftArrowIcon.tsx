@@ -1,4 +1,6 @@
-export const LeftArrowIcon: React.FC = () => (
+import { IconProps } from "@/types";
+
+export const LeftArrowIcon: React.FC = ({color, height, width}: IconProps) => (
   <svg
     width="10px"
     height="14px"

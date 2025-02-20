@@ -9,8 +9,16 @@ export interface SwiperProps {
   currentSlideList: number;
 }
 
-export interface SwiperButtonProps {
+export interface ButtonProps {
   onClick: (value: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   icon: ReactNode;
   disabled: boolean;
+}
+
+export type SizeType = string | number
+
+export interface IconProps {
+  width: SizeType;
+  height: SizeType;
+  color: string;
 }
