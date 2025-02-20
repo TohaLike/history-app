@@ -9,16 +9,25 @@ export interface SwiperProps {
   currentSlideList: number;
 }
 
+export type TypeBtn = (
+  value: React.MouseEvent<HTMLButtonElement, MouseEvent>
+) => void;
+
 export interface ButtonProps {
-  onClick: (value: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  onClick: TypeBtn;
   icon: ReactNode;
   disabled: boolean;
 }
 
-export type SizeType = string | number
+export type SizeType = string | number;
 
 export interface IconProps {
   width: SizeType;
   height: SizeType;
   color: string;
+}
+
+export interface SelectControlsProps {
+  prevButton: TypeBtn;
+  nextButton: TypeBtn;
 }

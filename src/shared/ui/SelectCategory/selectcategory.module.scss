@@ -109,21 +109,6 @@ svg {
 }
 
 
-.buttons__container {
-  display: flex;
-  align-items: center;
-  margin: 20px 0 0;
-  gap: 20px;
-}
-
-.current__list span {
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 18.12px;
-  color: #42567a;
-}
-
-
 @media (max-width: 1090px) {
   .circular__carousel {
     display: none;
@@ -152,7 +137,9 @@ svg {
     display: none;
   }
 
-  .buttons__container {
+  .controls {
     display: none;
   }
 }
+
+

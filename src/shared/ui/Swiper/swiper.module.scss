@@ -42,11 +42,24 @@
   }
 }
 
+.swiper__controls {
+  display: none;
+}
+
 @media (max-width: 1090px) {
+  .swiper__container {
+    margin: 0;
+  }
+
+  .swiper {
+    height: 105px;
+    margin: 56px 0 0;
+  }
+
   .swiper__pagination {
     display: block;
   }
-  
+
   .button {
     &__prev {
       display: none;
@@ -54,5 +67,35 @@
     &__next {
       display: none;
     }
+  }
+
+  .swiper__controls {
+    margin-top: 78px;
+    display: flex;
+  }
+
+  .custom__pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    // margin-top: 20px;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 1px solid #42567A;
+    background-color: transparent;
+  }
+
+  .active {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 1px solid #42567A;
+    background-color: #42567A;
   }
 }

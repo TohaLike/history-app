@@ -3,10 +3,9 @@ import style from "./selectcategory.module.scss";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { AppContext } from "@/app/App";
-import { LeftArrowIcon, RightArrowIcon } from "@/shared/assets/icons";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
-import { SelectButton } from "../SelectButton/SelectButton";
 import { YEARS } from "@/years";
+import { SelectControls } from "../SelectControls/SelectControls";
 
 gsap.registerPlugin(MotionPathPlugin);
 
@@ -88,7 +87,6 @@ export const SelectCategory: React.FC = () => {
         0
       );
     },
-    
 
     { scope: wrapperRef }
   );
@@ -157,14 +155,6 @@ export const SelectCategory: React.FC = () => {
     });
   };
 
-  const toPaddedString = (value: number) => {
-    return String(value).padStart(2, "0");
-  };
-
-  function CurrentList() {
-    return `${toPaddedString(currentYear + 1)}/${toPaddedString(YEARS.length)}`;
-  }
-
   return (
     <div>
       <div className={style.circular__container}>
@@ -215,25 +205,8 @@ export const SelectCategory: React.FC = () => {
         </div>
       </div>
 
-      <div>
-        <div className={style.current__list}>
-          <span>
-            <CurrentList />
-          </span>
-        </div>
-
-        <div className={style.buttons__container}>
-          <SelectButton
-            icon={<LeftArrowIcon />}
-            onClick={handlePrev}
-            disabled={currentYear === 0}
-          />
-          <SelectButton
-            icon={<RightArrowIcon />}
-            onClick={handleNext}
-            disabled={currentYear === YEARS.length - 1}
-          />
-        </div>
+      <div className={style.controls}>
+        <SelectControls prevButton={handlePrev} nextButton={handleNext} />
       </div>
     </div>
   );
