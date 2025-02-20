@@ -85,7 +85,7 @@ export const Swiper: React.FC = () => {
               </SwiperSlide>
             ))}
 
-            <div ref={paginationRef} style={{ margin: "100px 0 0" }}></div>
+            <div ref={paginationRef} className={style.swiper__pagination}></div>
           </MainSwiper>
 
           <div className={style.button__next}>

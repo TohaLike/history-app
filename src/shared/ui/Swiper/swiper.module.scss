@@ -21,6 +21,11 @@
   line-height: 30px;
 }
 
+.swiper__pagination {
+  margin: 100px 0 0;
+  display: none;
+}
+
 .button {
   &__prev {
     position: absolute;
@@ -38,6 +43,10 @@
 }
 
 @media (max-width: 1090px) {
+  .swiper__pagination {
+    display: block;
+  }
+  
   .button {
     &__prev {
       display: none;
