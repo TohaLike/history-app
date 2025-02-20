@@ -122,3 +122,37 @@ svg {
   line-height: 18.12px;
   color: #42567a;
 }
+
+
+@media (max-width: 1090px) {
+  .circular__carousel {
+    display: none;
+  }
+  
+  .circular__container {
+    height: unset;
+    padding: 56px 0;
+    box-sizing: border-box;
+    border-bottom: 1px solid #C7CDD9;
+  }
+
+  .year {
+    &__container {
+      display: flex;
+      gap: calc(0px + (100 - 0) * ((100vw - 320px) / (1090 - 320)));
+    }
+  
+    &__container span {
+      font-size: calc(56px + (200 - 56) * ((100vw - 320px) / (1090 - 320)));
+      line-height: 160px;
+    }
+  }
+
+  .current__list {
+    display: none;
+  }
+
+  .buttons__container {
+    display: none;
+  }
+}

@@ -43,7 +43,14 @@ export const Swiper: React.FC = () => {
             />
           </div>
 
-          <MainSwiper ref={swiperRef} slidesPerView={3.5} spaceBetween={80}>
+          <MainSwiper
+            ref={swiperRef}
+            slidesPerView={2}
+            spaceBetween={30}
+            breakpoints={{
+              1090: { slidesPerView: 3.5, spaceBetween: 80 },
+            }}
+          >
             {YEARS[currentYear].data.map((e: SwiperItemProps, i: number) => (
               <SwiperSlide
                 key={`slide-${i}`}

@@ -36,3 +36,24 @@
   padding: 0 76px;
   box-sizing: border-box;
 }
+
+@media (max-width: 1090px) {
+  .title__container {
+    display: flex;
+    align-items: center;
+  }
+
+  .title {
+    font-size: 32px;
+    line-height: 67.2px;
+    margin-left: 34px;
+  }
+
+  .year__container {
+    padding: 0 34px;
+  }
+
+  .line {
+    display: none;
+  }
+}
