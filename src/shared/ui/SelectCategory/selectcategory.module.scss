@@ -5,7 +5,6 @@
   justify-content: center;
 }
 
-
 .year {
   &__container {
     display: flex;
@@ -27,7 +26,6 @@
     color: #ef5da8;
   }
 }
-
 
 .circular__carousel {
   position: absolute;
@@ -54,26 +52,44 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  // transition: 0.4s;
+  transition: 0.4 ease;
 
-  .item__content {
+  &__content {
     display: none;
     transition: 0.4s ease;
+    position: relative;
   }
 }
 
-.item:hover {
-  width: 56px;
-  height: 56px;
-  background-color: #f4f5f9;
-  border: 1px solid #42567a;
+.item::before {
+  content: "";
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: transparent;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 
+.item:hover {
   .item__content {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100px;
     font-weight: 400;
     font-size: 20px;
     line-height: 30px;
     color: #42567a;
+    min-width: 56px;
+    height: 56px;
+    background-color: #f4f5f9;
+    border: 1px solid #42567a;
+    .item__active__text {
+      display: none;
+    }
   }
 }
 
@@ -87,11 +103,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
   font-weight: 400;
   font-size: 20px;
   line-height: 30px;
   color: #42567a;
+  position: relative;
+
+  &__text {
+    position: absolute;
+    top: 14px;
+    left: 70px;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 25px;
+    width: 232px;
+  }
 }
 
 svg {
@@ -108,17 +134,16 @@ svg {
   stroke-miterlimit: 1;
 }
 
-
 @media (max-width: 1090px) {
   .circular__carousel {
     display: none;
   }
-  
+
   .circular__container {
     height: unset;
     padding: 56px 0;
     box-sizing: border-box;
-    border-bottom: 1px solid #C7CDD9;
+    border-bottom: 1px solid #c7cdd9;
   }
 
   .year {
@@ -126,7 +151,7 @@ svg {
       display: flex;
       gap: calc(0px + (100 - 0) * ((100vw - 320px) / (1090 - 320)));
     }
-  
+
     &__container span {
       font-size: calc(56px + (200 - 56) * ((100vw - 320px) / (1090 - 320)));
       line-height: 160px;
@@ -141,5 +166,3 @@ svg {
     display: none;
   }
 }
-
-

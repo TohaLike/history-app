@@ -7,7 +7,7 @@ import Layout from "./layout";
 export const AppContext = createContext(null);
 
 const App: React.FC = () => {
-  const [currentYear, setCurrentYear] = useState<number>(5);
+  const [currentYear, setCurrentYear] = useState<number>(0);
   const [themeChanged, setThemeChanged] = useState<boolean>(false);
   const [isCircleAnimationComplete, setIsCircleAnimationComplete] =
     useState<boolean>(true);

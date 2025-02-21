@@ -1,11 +1,11 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import style from "./selectcategory.module.scss";
 import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
 import { AppContext } from "@/app/App";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
-import { YEARS } from "@/years";
 import { SelectControls } from "../SelectControls/SelectControls";
+
+import { YEARS } from "@/years";
 
 gsap.registerPlugin(MotionPathPlugin);
 
@@ -16,144 +16,126 @@ export const SelectCategory: React.FC = () => {
     setThemeChanged,
     setIsCircleAnimationComplete,
   } = useContext(AppContext);
+  const [showText, setShowText] = useState<boolean>(false);
 
-  const itemsRef = useRef<HTMLDivElement[]>([]);
   const wrapperRef = useRef<HTMLDivElement>(null);
-
-  const tl = useRef<gsap.core.Timeline | null>(null);
+  const itemsRef = useRef<any[]>([]);
+  const tl = useRef(gsap.timeline({ paused: true, reversed: true }));
+  const tracker = useRef({ item: 0 });
 
   const lengthOfItems = 6;
 
-  const step = 1 / lengthOfItems;
-  const wrapProgress = gsap.utils.wrap(0, 1);
-  const wrapTracker = gsap.utils.wrap(0, lengthOfItems);
-  const snap = gsap.utils.snap(step);
+  const numItems = 6;
+  const wrapTracker = gsap.utils.wrap(0, numItems);
 
-  let tracker = { item: 0 };
+  useEffect(() => {
+    const svg = document.querySelector("svg");
+    if (!svg) return;
 
-  useGSAP(
-    () => {
-      const circlePath = MotionPathPlugin.convertToPath("#holder", false)[0];
-      circlePath.id = "circlePath";
+    const circlePath = MotionPathPlugin.convertToPath("#holder", false)[0];
+    circlePath.id = "circlePath";
+    svg.prepend(circlePath);
 
-      document.querySelector("svg")?.prepend(circlePath);
+    if (!itemsRef.current) return;
 
-      gsap.set(itemsRef.current, {
-        motionPath: {
-          path: circlePath,
-          align: circlePath,
-          alignOrigin: [0.5, 0.5],
-          end: (i: number) => i / lengthOfItems,
-        },
-        scale: 1,
-      });
+    gsap.set(itemsRef.current, {
+      motionPath: {
+        path: circlePath,
+        align: circlePath,
+        alignOrigin: [0.5, 0.5],
+        end: (i: number) => i / numItems - 0.1666666666666667,
+      },
+      scale: 0.9,
+    });
 
-      tl.current = gsap.timeline({ paused: true });
+    tl.current.to(wrapperRef.current, {
+      rotation: 360,
+      transformOrigin: "center",
+      duration: 1,
+      ease: "none",
+    });
 
-      tl.current.to(wrapperRef.current, {
-        rotation: 360,
+    tl.current.to(
+      itemsRef.current,
+      {
+        rotation: "-=360",
         transformOrigin: "center",
         duration: 1,
         ease: "none",
-      });
+      },
+      0
+    );
 
-      tl.current.to(
-        itemsRef.current,
-        {
-          rotation: "-=360",
-          transformOrigin: "center",
-          duration: 1,
-          ease: "none",
-        },
-        0
-      );
-
-      tl.current.to(
-        tracker,
-        {
-          item: lengthOfItems,
-          duration: 1,
-          ease: "none",
-          modifiers: {
-            item(value: number) {
-              const newItem = wrapTracker(
-                lengthOfItems - 1 - Math.round(value)
-              );
-              setCurrentYear(newItem);
-              return newItem;
-            },
+    tl.current.to(
+      tracker.current,
+      {
+        item: numItems,
+        duration: 1,
+        ease: "none",
+        modifiers: {
+          item(value: number) {
+            return wrapTracker(numItems - Math.round(value));
           },
         },
-        0
-      );
-    },
+      },
+      0
+    );
+  }, []);
 
-    { scope: wrapperRef }
-  );
+  const moveWheel = (amount: number) => {
+    console.log(amount)
 
-  const handlePrev = () => {
-    if (tl.current) {
-      setIsCircleAnimationComplete(false);
-      setThemeChanged(true);
+    if (!itemsRef.current) return;
 
-      gsap.to(tl.current, {
-        progress: snap(tl.current.progress() + step),
-        modifiers: {
-          progress: wrapProgress,
-        },
-        onComplete: () => {
-          setIsCircleAnimationComplete(true);
-          setThemeChanged(false);
-        },
-      });
-    }
-  };
-
-  const handleNext = () => {
-    if (tl.current) {
-      setIsCircleAnimationComplete(false);
-      setThemeChanged(true);
-
-      gsap.to(tl.current, {
-        progress: snap(tl.current.progress() - step),
-        modifiers: {
-          progress: wrapProgress,
-        },
-        onComplete: () => {
-          setIsCircleAnimationComplete(true);
-          setThemeChanged(false);
-        },
-      });
-    }
-  };
-
-  const handleMove = (index: number) => {
-    if (index === currentYear) return;
-
-    setThemeChanged(true);
     setIsCircleAnimationComplete(false);
+    setThemeChanged(true);
 
-    let diff = currentYear - index;
-    let newProgress;
+    const numItems = itemsRef.current.length;
+    const itemStep = 1 / numItems;
+    const wrapProgress = gsap.utils.wrap(0, 1);
+    const snap = gsap.utils.snap(itemStep);
 
-    if (Math.abs(diff) < lengthOfItems / 2) {
-      newProgress = snap(tl.current.progress() + diff * step);
-    } else {
-      let amt = lengthOfItems - Math.abs(diff);
-      newProgress = snap(
-        tl.current.progress() + (currentYear > index ? -amt * step : amt * step)
-      );
-    }
+    let progress = tl.current.progress();
+    tl.current.progress(wrapProgress(snap(tl.current.progress() + amount)));
+
+    let next = tracker.current.item;
+    tl.current.progress(progress);
 
     gsap.to(tl.current, {
-      progress: newProgress,
-      modifiers: { progress: wrapProgress },
+      progress: snap(tl.current.progress() + amount),
+      modifiers: {
+        progress: wrapProgress,
+      },
+      onUpdate: () => {
+        setCurrentYear(next);
+      },
       onComplete: () => {
         setIsCircleAnimationComplete(true);
         setThemeChanged(false);
       },
     });
   };
+
+  function moveItem(targetIndex: number) {
+    let current = tracker.current.item;
+    if (targetIndex === current) return;
+
+    let diff = current - targetIndex;
+
+    if (Math.abs(diff) < numItems / 2) {
+      moveWheel((diff * 1) / (itemsRef.current?.length || 1));
+    } else {
+      let amt = numItems - Math.abs(diff);
+      if (current > targetIndex) {
+        moveWheel((amt * -1) / (itemsRef.current?.length || 1));
+      } else {
+        moveWheel((amt * 1) / (itemsRef.current?.length || 1));
+      }
+    }
+  }
+
+  const handleNext = () => moveWheel(-1 / (itemsRef.current?.length || 1));
+  const handlePrev = () => moveWheel(1 / (itemsRef.current?.length || 1));
 
   return (
     <div>
@@ -173,7 +155,7 @@ export const SelectCategory: React.FC = () => {
               {[...Array(lengthOfItems)].map((_, i) => (
                 <div
                   key={i}
-                  onClick={() => handleMove(i)}
+                  onClick={() => moveItem(i)}
                   className={style.item}
                   ref={(el) => {
                     if (el) itemsRef.current[i] = el;
@@ -186,7 +168,12 @@ export const SelectCategory: React.FC = () => {
                         : style.item__content
                     }
                   >
-                    {i + 1}
+                    <div className={style.circle}>{i + 1}</div>
+                    {showText && (
+                      <span className={style.item__active__text}>
+                        {YEARS[currentYear].category}
+                      </span>
+                    )}
                   </div>
                 </div>
               ))}
