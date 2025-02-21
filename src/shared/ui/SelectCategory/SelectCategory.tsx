@@ -19,7 +19,7 @@ export const SelectCategory: React.FC = () => {
   const [showText, setShowText] = useState<boolean>(true);
 
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const textRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<any[]>([]);
   const yearRef = useRef<HTMLDivElement>(null);
   const yearRefTwo = useRef<HTMLDivElement>(null);
 
@@ -31,6 +31,31 @@ export const SelectCategory: React.FC = () => {
 
   const numItems = 6;
   const wrapTracker = gsap.utils.wrap(0, numItems);
+
+  const openCircle = (index: number) => {
+    gsap.to(itemsRef.current[index], {
+      width: 56,
+      height: 56,
+      backgroundColor: "#f4f5f9",
+      border: "1px solid #42567a",
+      fontSize: "20px",
+      borderWidth: 1,
+      duration: 0.3,
+      ease: "power1.out",
+    });
+  };
+
+  const closedCircle = (index: number) => {
+    gsap.to(itemsRef.current[index], {
+      width: 6,
+      height: 6,
+      borderWidth: 0,
+      backgroundColor: "#42567a",
+      fontSize: 0,
+      duration: 0.3,
+      ease: "power1.out",
+    });
+  };
 
   useEffect(() => {
     const svg = document.querySelector("svg");
@@ -70,6 +95,35 @@ export const SelectCategory: React.FC = () => {
       0
     );
 
+    gsap.set(itemsRef.current, {
+      width: 6,
+      height: 6,
+      borderWidth: 0,
+      backgroundColor: "#42567a",
+      fontSize: 0,
+      duration: 0.3,
+      ease: "power1.out",
+    });
+
+    gsap.set(itemsRef.current[tracker.current.item], {
+      width: 56,
+      height: 56,
+      backgroundColor: "#f4f5f9",
+      border: "1px solid #42567a",
+      fontSize: "20px",
+      borderWidth: 1,
+      duration: 0.3,
+      ease: "power1.out",
+    });
+
+    gsap.set(textRef.current, {
+      display: "none",
+    });
+
+    gsap.set(textRef.current[tracker.current.item], {
+      display: "block",
+    });
+
     tl.current.to(
       tracker.current,
       {
@@ -85,6 +139,22 @@ export const SelectCategory: React.FC = () => {
       0
     );
   }, []);
+
+  const yearAction = (yearRef: any, year: any, secondYear: any) => {
+    gsap.fromTo(
+      yearRef,
+      { textContent: year },
+      {
+        textContent: secondYear,
+        duration: 0.8,
+        ease: "Power1.easeIn",
+        snap: { textContent: 1 },
+        stagger: {
+          each: 1.0,
+        },
+      }
+    );
+  };
 
   const moveWheel = (amount: number) => {
     if (!itemsRef.current) return;
@@ -104,35 +174,27 @@ export const SelectCategory: React.FC = () => {
     let next = tracker.current.item;
     tl.current.progress(progress);
 
-    gsap.fromTo(
-      yearRef.current,
-      { textContent: YEARS[currentYear].data[0].year }, 
-      {
-        textContent: YEARS[next].data[0].year, 
-        duration: 0.8,
-        ease: "Power1.easeIn",
-        snap: { textContent: 1 },
-        stagger: {
-          each: 1.0,
-        },
-      }
-    );
+    closedCircle(tracker.current.item);
+    openCircle(next);
 
-    gsap.fromTo(
+    gsap.set(textRef.current[tracker.current.item], {
+      display: "none",
+    });
+
+    gsap.set(textRef.current[next], {
+      display: "block",
+    });
+
+    yearAction(
+      yearRef.current,
+      YEARS[currentYear].data[0].year,
+      YEARS[next].data[0].year
+    );
+    
+    yearAction(
       yearRefTwo.current,
-      {
-        textContent:
-          YEARS[currentYear].data[YEARS[currentYear].data.length - 1].year,
-      }, 
-      {
-        textContent: YEARS[next].data[YEARS[currentYear].data.length - 1].year, // Конечное значение
-        duration: 0.8,
-        ease: "Power1.easeIn",
-        snap: { textContent: 1 },
-        stagger: {
-          each: 1.0,
-        },
-      }
+      YEARS[currentYear].data[YEARS[currentYear].data.length - 1].year,
+      YEARS[next].data[YEARS[currentYear].data.length - 1].year
     );
 
     gsap.to(tl.current, {
@@ -196,19 +258,16 @@ export const SelectCategory: React.FC = () => {
                     if (el) itemsRef.current[i] = el;
                   }}
                 >
-                  <div
-                    className={
-                      i === currentYear
-                        ? style.item__active
-                        : style.item__content
-                    }
-                  >
-                    <div className={style.circle}>{i + 1}</div>
-                    {showText && (
-                      <span className={style.item__active__text} ref={textRef}>
-                        {YEARS[currentYear].category}
-                      </span>
-                    )}
+                  <div className={style.item__content}>
+                    <span>{i + 1}</span>
+                    <p
+                      className={style.item__active__text}
+                      ref={(el) => {
+                        if (el) textRef.current[i] = el;
+                      }}
+                    >
+                      {YEARS[currentYear].category}
+                    </p>
                   </div>
                 </div>
               ))}
