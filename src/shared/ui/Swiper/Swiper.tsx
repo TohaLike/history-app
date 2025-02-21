@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import style from "./swiper.module.scss";
-import { Swiper as MainSwiper, SwiperSlide } from "swiper/react";
+import { Swiper as MainSwiper, SwiperRef, SwiperSlide } from "swiper/react";
 import { Swiper as SwiperProps } from "swiper/types";
 import { SwiperItemProps } from "@/types";
 import { LeftArrowIcon, RightArrowIcon } from "@/shared/assets/icons";
@@ -16,7 +16,6 @@ import { YEARS } from "@/years";
 
 export const Swiper: React.FC = () => {
   const {
-    swiperRef,
     currentYear,
     themeChanged,
     isCircleAnimationComplete,
@@ -29,6 +28,8 @@ export const Swiper: React.FC = () => {
   const [isBeginning, setIsBeginning] = useState<boolean>(false);
   const [paginationEnabled, setPaginationEnabled] = useState<boolean>(false);
   const [activeIndex, setActiveIndex] = useState<number>(0);
+
+  const swiperRef = useRef<SwiperRef>(null);
 
   const nextSlide = () => {
     swiperRef?.current.swiper.slideNext();
@@ -45,7 +46,7 @@ export const Swiper: React.FC = () => {
     setThemeChanged(true);
 
     setTimeout(() => {
-      setActiveIndex(0)
+      setActiveIndex(0);
       setCurrentYear((prev: number) => prev - 1);
       setIsCircleAnimationComplete(true);
       setThemeChanged(false);
@@ -58,7 +59,7 @@ export const Swiper: React.FC = () => {
     setThemeChanged(true);
 
     setTimeout(() => {
-      setActiveIndex(0)
+      setActiveIndex(0);
       setCurrentYear((prev: number) => prev + 1);
       setIsCircleAnimationComplete(true);
       setThemeChanged(false);
@@ -145,7 +146,7 @@ export const Swiper: React.FC = () => {
           {YEARS[currentYear].data.map((_, index) => (
             <span
               key={index}
-              className={activeIndex === index ? style.active : style.dot} 
+              className={activeIndex === index ? style.active : style.dot}
               onClick={() => swiperRef.current?.swiper.slideTo(index)}
             />
           ))}

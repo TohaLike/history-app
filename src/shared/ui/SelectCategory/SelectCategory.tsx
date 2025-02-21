@@ -16,7 +16,7 @@ export const SelectCategory: React.FC = () => {
     setThemeChanged,
     setIsCircleAnimationComplete,
   } = useContext(AppContext);
-  const [showText, setShowText] = useState<boolean>(false);
+  const [showText, setShowText] = useState<boolean>(true);
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
@@ -41,17 +41,6 @@ export const SelectCategory: React.FC = () => {
     svg.prepend(circlePath);
 
     if (!itemsRef.current) return;
-
-    gsap.fromTo(
-      textRef.current,
-      { y: -20, opacity: 0 }, // Начальное состояние (выше и невидимо)
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.6,
-        ease: "power2.out",
-      }
-    );
 
     gsap.set(itemsRef.current, {
       motionPath: {
@@ -117,10 +106,10 @@ export const SelectCategory: React.FC = () => {
 
     gsap.fromTo(
       yearRef.current,
-      { textContent: YEARS[currentYear].data[0].year }, // Начальное значение
+      { textContent: YEARS[currentYear].data[0].year }, 
       {
-        textContent: YEARS[next].data[0].year, // Конечное значение
-        duration: 0.5,
+        textContent: YEARS[next].data[0].year, 
+        duration: 0.8,
         ease: "Power1.easeIn",
         snap: { textContent: 1 },
         stagger: {
@@ -131,7 +120,10 @@ export const SelectCategory: React.FC = () => {
 
     gsap.fromTo(
       yearRefTwo.current,
-      { textContent: YEARS[currentYear].data[YEARS[currentYear].data.length - 1].year }, // Начальное значение
+      {
+        textContent:
+          YEARS[currentYear].data[YEARS[currentYear].data.length - 1].year,
+      }, 
       {
         textContent: YEARS[next].data[YEARS[currentYear].data.length - 1].year, // Конечное значение
         duration: 0.8,
@@ -142,7 +134,7 @@ export const SelectCategory: React.FC = () => {
         },
       }
     );
-    
+
     gsap.to(tl.current, {
       progress: snap(tl.current.progress() + amount),
       modifiers: {
@@ -212,11 +204,11 @@ export const SelectCategory: React.FC = () => {
                     }
                   >
                     <div className={style.circle}>{i + 1}</div>
-                    {/* {showText && ( */}
-                    <span className={style.item__active__text} ref={textRef}>
-                      {YEARS[currentYear].category}
-                    </span>
-                    {/* )} */}
+                    {showText && (
+                      <span className={style.item__active__text} ref={textRef}>
+                        {YEARS[currentYear].category}
+                      </span>
+                    )}
                   </div>
                 </div>
               ))}
