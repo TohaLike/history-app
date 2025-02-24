@@ -8,8 +8,7 @@ export const AppContext = createContext(null);
 const App: React.FC = () => {
   const [currentYear, setCurrentYear] = useState<number>(0);
   const [themeChanged, setThemeChanged] = useState<boolean>(false);
-  const [isCircleAnimationComplete, setIsCircleAnimationComplete] =
-    useState<boolean>(true);
+  const [isCircleAnimationComplete, setIsCircleAnimationComplete] = useState<boolean>(true);
 
   return (
     <AppContext.Provider

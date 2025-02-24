@@ -6,6 +6,7 @@ import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 import { SelectControls } from "../SelectControls/SelectControls";
 
 import { YEARS } from "@/years";
+import { TypeBtn } from "@/types";
 
 gsap.registerPlugin(MotionPathPlugin);
 
@@ -22,6 +23,7 @@ export const SelectCategory: React.FC = () => {
   const textRef = useRef<any[]>([]);
   const yearRef = useRef<HTMLDivElement>(null);
   const yearRefTwo = useRef<HTMLDivElement>(null);
+  const hoverRef = useRef<any[]>([]);
 
   const itemsRef = useRef<any[]>([]);
   const tl = useRef(gsap.timeline({ paused: true, reversed: true }));
@@ -38,6 +40,7 @@ export const SelectCategory: React.FC = () => {
       height: 56,
       backgroundColor: "#f4f5f9",
       border: "1px solid #42567a",
+      borderRadius: 100,
       fontSize: "20px",
       borderWidth: 1,
       duration: 0.3,
@@ -45,7 +48,7 @@ export const SelectCategory: React.FC = () => {
     });
   };
 
-  const closedCircle = (index: number) => {
+  const closedCircle = (index?: number) => {
     gsap.to(itemsRef.current[index], {
       width: 6,
       height: 6,
@@ -105,16 +108,7 @@ export const SelectCategory: React.FC = () => {
       ease: "power1.out",
     });
 
-    gsap.set(itemsRef.current[tracker.current.item], {
-      width: 56,
-      height: 56,
-      backgroundColor: "#f4f5f9",
-      border: "1px solid #42567a",
-      fontSize: "20px",
-      borderWidth: 1,
-      duration: 0.3,
-      ease: "power1.out",
-    });
+    openCircle(tracker.current.item);
 
     gsap.set(textRef.current, {
       display: "none",
@@ -190,7 +184,7 @@ export const SelectCategory: React.FC = () => {
       YEARS[currentYear].data[0].year,
       YEARS[next].data[0].year
     );
-    
+
     yearAction(
       yearRefTwo.current,
       YEARS[currentYear].data[YEARS[currentYear].data.length - 1].year,
@@ -216,6 +210,8 @@ export const SelectCategory: React.FC = () => {
   function moveItem(targetIndex: number) {
     let current = tracker.current.item;
     if (targetIndex === current) return;
+
+    closedCircle(targetIndex);
 
     let diff = current - targetIndex;
 
@@ -251,8 +247,10 @@ export const SelectCategory: React.FC = () => {
             <div className={style.items}>
               {[...Array(lengthOfItems)].map((_, i) => (
                 <div
-                  key={i}
+                  key={`circle-item-${i}`}
                   onClick={() => moveItem(i)}
+                  // onMouseEnter={() => openCircle(i)}
+                  // onMouseLeave={() => closedCircle(i)}
                   className={style.item}
                   ref={(el) => {
                     if (el) itemsRef.current[i] = el;
@@ -261,7 +259,6 @@ export const SelectCategory: React.FC = () => {
                   <div className={style.item__content}>
                     <span>{i + 1}</span>
                     <p
-                      className={style.item__active__text}
                       ref={(el) => {
                         if (el) textRef.current[i] = el;
                       }}
