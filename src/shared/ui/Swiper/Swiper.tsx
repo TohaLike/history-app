@@ -81,6 +81,9 @@ export const Swiper: React.FC = () => {
   const swiperKey = `swiper-${paginationEnabled}`;
 
   useEffect(() => {
+    setIsBeginning(true);
+    setIsEnd(false);
+    
     gsap.fromTo(
       containerRef.current,
       { opacity: 0, y: 50 },
