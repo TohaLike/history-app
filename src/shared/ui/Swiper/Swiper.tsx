@@ -23,7 +23,6 @@ export const Swiper: React.FC = () => {
     setIsCircleAnimationComplete,
     setThemeChanged,
   } = useContext(AppContext);
-  const [isSwiper, setIsSwiper] = useState<SwiperProps>(null);
   const [isEnd, setIsEnd] = useState<boolean>(false);
   const [isBeginning, setIsBeginning] = useState<boolean>(true);
   const [paginationEnabled, setPaginationEnabled] = useState<boolean>(false);
