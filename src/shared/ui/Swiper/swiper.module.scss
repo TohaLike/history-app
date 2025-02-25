@@ -81,10 +81,12 @@
   .swiper__controls {
     margin-top: 78px;
     display: flex;
+    gap: 40px;
   }
 
   .custom__pagination {
     display: flex;
+    align-items: center;
     justify-content: center;
     gap: 10px;
   }

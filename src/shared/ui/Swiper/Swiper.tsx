@@ -25,10 +25,11 @@ export const Swiper: React.FC = () => {
   const [isEnd, setIsEnd] = useState<boolean>(false);
   const [isBeginning, setIsBeginning] = useState<boolean>(true);
   const [paginationEnabled, setPaginationEnabled] = useState<boolean>(false);
-  const [activeIndex, setActiveIndex] = useState<number>(0);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const swiperRef = useRef<SwiperRef>(null);
+
+  const swiperKey = `swiper-${paginationEnabled}`;
 
   const nextSlide = () => {
     swiperRef?.current.swiper.slideNext();
@@ -45,7 +46,6 @@ export const Swiper: React.FC = () => {
     setThemeChanged(true);
 
     setTimeout(() => {
-      setActiveIndex(0);
       setCurrentYear((prev: number) => prev - 1);
       setIsCircleAnimationComplete(true);
       setThemeChanged(false);
@@ -58,8 +58,18 @@ export const Swiper: React.FC = () => {
     setThemeChanged(true);
 
     setTimeout(() => {
-      setActiveIndex(0);
       setCurrentYear((prev: number) => prev + 1);
+      setIsCircleAnimationComplete(true);
+      setThemeChanged(false);
+    }, 100);
+  };
+
+  const handleChange = (index: number) => {
+    setIsCircleAnimationComplete(false);
+    setThemeChanged(true);
+
+    setTimeout(() => {
+      setCurrentYear(index);
       setIsCircleAnimationComplete(true);
       setThemeChanged(false);
     }, 100);
@@ -76,8 +86,6 @@ export const Swiper: React.FC = () => {
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-  const swiperKey = `swiper-${paginationEnabled}`;
 
   useEffect(() => {
     setIsBeginning(true);
@@ -96,7 +104,6 @@ export const Swiper: React.FC = () => {
         <div className={style.swiper}>
           {isCircleAnimationComplete && (
             <div>
-
               <h2 className={style.title}>{YEARS[currentYear].category}</h2>
 
               <div className={style.swiper__container}>
@@ -118,7 +125,6 @@ export const Swiper: React.FC = () => {
                   modules={[Pagination]}
                   pagination={{ el: null }}
                   onSlideChange={(swiper) => {
-                    setActiveIndex(swiper.activeIndex);
                     setIsBeginning(swiper.isBeginning);
                     setIsEnd(swiper.isEnd);
                   }}
@@ -162,11 +168,13 @@ export const Swiper: React.FC = () => {
       <div className={style.swiper__controls}>
         <SelectControls prevButton={prevCategory} nextButton={nextCategory} />
         <div className={style.custom__pagination}>
-          {YEARS[currentYear].data.map((_, index) => (
+          {Array.from({
+            length: YEARS.length,
+          }).map((_, index) => (
             <span
               key={index}
-              className={activeIndex === index ? style.active : style.dot}
-              onClick={() => swiperRef.current?.swiper.slideTo(index)}
+              className={currentYear === index ? style.active : style.dot}
+              onClick={() => handleChange(index)}
             />
           ))}
         </div>
