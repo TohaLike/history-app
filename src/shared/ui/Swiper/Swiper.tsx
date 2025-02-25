@@ -25,7 +25,7 @@ export const Swiper: React.FC = () => {
   } = useContext(AppContext);
   const [isSwiper, setIsSwiper] = useState<SwiperProps>(null);
   const [isEnd, setIsEnd] = useState<boolean>(false);
-  const [isBeginning, setIsBeginning] = useState<boolean>(false);
+  const [isBeginning, setIsBeginning] = useState<boolean>(true);
   const [paginationEnabled, setPaginationEnabled] = useState<boolean>(false);
   const [activeIndex, setActiveIndex] = useState<number>(0);
 
@@ -95,13 +95,16 @@ export const Swiper: React.FC = () => {
         <div className={style.swiper}>
           {isCircleAnimationComplete && (
             <div className={style.swiper__container}>
-              <div className={style.button__prev}>
-                <SwiperButton
-                  onClick={prevSlide}
-                  icon={<LeftArrowIcon />}
-                  disabled={isBeginning}
-                />
-              </div>
+
+              {!isBeginning && (
+                <div className={style.button__prev}>
+                  <SwiperButton
+                    onClick={prevSlide}
+                    icon={<LeftArrowIcon />}
+                    disabled={isBeginning}
+                  />
+                </div>
+              )}
 
               <MainSwiper
                 key={swiperKey}
@@ -110,7 +113,11 @@ export const Swiper: React.FC = () => {
                 spaceBetween={30}
                 modules={[Pagination]}
                 pagination={{ el: null }}
-                onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
+                onSlideChange={(swiper) => {
+                  setActiveIndex(swiper.activeIndex);
+                  setIsBeginning(swiper.isBeginning);
+                  setIsEnd(swiper.isEnd);
+                }}
                 breakpoints={{
                   1090: {
                     spaceBetween: 80,
@@ -133,13 +140,15 @@ export const Swiper: React.FC = () => {
                 )}
               </MainSwiper>
 
-              <div className={style.button__next}>
-                <SwiperButton
-                  onClick={nextSlide}
-                  icon={<RightArrowIcon />}
-                  disabled={isEnd}
-                />
-              </div>
+              {!isEnd && (
+                <div className={style.button__next}>
+                  <SwiperButton
+                    onClick={nextSlide}
+                    icon={<RightArrowIcon />}
+                    disabled={isEnd}
+                  />
+                </div>
+              )}
             </div>
           )}
         </div>
