@@ -65,6 +65,8 @@ export const Swiper: React.FC = () => {
   };
 
   const handleChange = (index: number) => {
+    if (currentYear === index) return;
+    
     setIsCircleAnimationComplete(false);
     setThemeChanged(true);
 

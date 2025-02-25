@@ -150,6 +150,7 @@ export const SelectCategory: React.FC = () => {
   return (
     <div>
       <div className={style.circular__container}>
+        
         <div className={style.year__container}>
           <span className={style.year__first} ref={yearRef}>
             {YEARS[currentYear].data[0].year}
