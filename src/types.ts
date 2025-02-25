@@ -1,12 +1,8 @@
-import { ReactNode } from "react";
+import { Dispatch, ReactNode, SetStateAction } from "react";
 
 export interface SwiperItemProps {
   year: number;
   description: string;
-}
-
-export interface SwiperProps {
-  currentSlideList: number;
 }
 
 export type TypeBtn = (
@@ -20,6 +16,7 @@ export interface ButtonProps {
 }
 
 export type SizeType = string | number;
+export type StateType<K extends any> = Dispatch<SetStateAction<K>>;
 
 export interface IconProps {
   width: SizeType;
@@ -27,10 +24,29 @@ export interface IconProps {
   color: string;
 }
 
+export interface SelectCategoryProps {
+  array: any;
+  currentYear: number;
+  setCurrentYear: StateType<number>;
+  setThemeChanged: StateType<boolean>;
+  setIsCircleAnimationComplete: StateType<boolean>;
+}
+
 export interface SelectControlsProps {
+  arrLength: number;
+  index: number;
   prevButton: TypeBtn;
   nextButton: TypeBtn;
 }
 
+export interface SwiperProps {
+  array: any;
+  currentYear: number;
+  themeChanged: boolean;
+  isCircleAnimationComplete: boolean;
+  setCurrentYear: StateType<number>;
+  setThemeChanged: StateType<boolean>;
+  setIsCircleAnimationComplete: StateType<boolean>;
+}
 
-export type RefObject = React.RefObject<HTMLSpanElement>
+export type RefObject = React.RefObject<HTMLSpanElement>;

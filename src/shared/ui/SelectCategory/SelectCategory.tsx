@@ -1,23 +1,20 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import style from "./selectcategory.module.scss";
-import gsap from "gsap";
-import { AppContext } from "@/app/App";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 import { SelectControls } from "../SelectControls/SelectControls";
-import { animateYear, closedCircle, openCircle } from "@/shared/helpers/GsapHelpers";
-import { RefObject } from "@/types";
-
-import { YEARS } from "@/years";
+import { animateYear, closedCircle, openCircle } from "@/shared/untils/GsapUntils";
+import { RefObject, SelectCategoryProps } from "@/types";
+import gsap from "gsap";
 
 gsap.registerPlugin(MotionPathPlugin);
 
-export const SelectCategory: React.FC = () => {
-  const {
-    currentYear,
-    setCurrentYear,
-    setThemeChanged,
-    setIsCircleAnimationComplete,
-  } = useContext(AppContext);
+export const SelectCategory: React.FC<SelectCategoryProps> = ({
+  array,
+  currentYear,
+  setCurrentYear,
+  setThemeChanged,
+  setIsCircleAnimationComplete,
+}) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const yearRef = useRef<HTMLDivElement>(null);
   const yearRefTwo = useRef<HTMLDivElement>(null);
@@ -28,7 +25,7 @@ export const SelectCategory: React.FC = () => {
   const tl = useRef(gsap.timeline({ paused: true, reversed: true }));
   const tracker = useRef({ item: 0 });
 
-  const numItems = 6;
+  const numItems = array ? array.length : 0;
   const itemStep = 1 / numItems;
   const wrapTracker = gsap.utils.wrap(0, numItems);
   const wrapProgress = gsap.utils.wrap(0, 1);
@@ -109,14 +106,14 @@ export const SelectCategory: React.FC = () => {
 
     animateYear(
       yearRef,
-      YEARS[currentYear].data[0].year,
-      YEARS[next].data[0].year
+      array[currentYear].data[0].year,
+      array[next].data[0].year
     );
 
     animateYear(
       yearRefTwo,
-      YEARS[currentYear].data[YEARS[currentYear].data.length - 1].year,
-      YEARS[next].data[YEARS[currentYear].data.length - 1].year
+      array[currentYear].data[array[currentYear].data.length - 1].year,
+      array[next].data[array[currentYear].data.length - 1].year
     );
 
     gsap.to(tl.current, {
@@ -150,13 +147,12 @@ export const SelectCategory: React.FC = () => {
   return (
     <div>
       <div className={style.circular__container}>
-        
         <div className={style.year__container}>
           <span className={style.year__first} ref={yearRef}>
-            {YEARS[currentYear].data[0].year}
+            {array[currentYear].data[0].year}
           </span>
           <span className={style.year__last} ref={yearRefTwo}>
-            {YEARS[currentYear].data[YEARS[currentYear].data.length - 1].year}
+            {array[currentYear].data[array[currentYear].data.length - 1].year}
           </span>
         </div>
 
@@ -176,7 +172,7 @@ export const SelectCategory: React.FC = () => {
                   >
                     <span>{i + 1}</span>
                     <h2 ref={(el: any) => (textRef.current[i] = el)}>
-                      {YEARS[currentYear].category}
+                      {array[currentYear].category}
                     </h2>
                   </div>
                 </div>
@@ -197,7 +193,12 @@ export const SelectCategory: React.FC = () => {
       </div>
 
       <div className={style.controls}>
-        <SelectControls prevButton={handlePrev} nextButton={handleNext} />
+        <SelectControls
+          arrLength={array.length}
+          index={currentYear}
+          prevButton={handlePrev}
+          nextButton={handleNext}
+        />
       </div>
     </div>
   );

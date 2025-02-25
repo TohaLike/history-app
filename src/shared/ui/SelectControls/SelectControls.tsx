@@ -1,22 +1,23 @@
-import React, { useContext } from "react";
+import React from "react";
 import style from "./selectcontrols.module.scss";
-import { AppContext } from "@/app/App";
 import { SelectButton } from "../SelectButton/SelectButton";
 import { LeftArrowIcon, RightArrowIcon } from "@/shared/assets/icons";
 import { SelectControlsProps } from "@/types";
-import { YEARS } from "@/years";
 
-export const SelectControls: React.FC<SelectControlsProps> = ({prevButton, nextButton}) => {
-  const { currentYear, setCurrentYear } = useContext(AppContext);
+export const SelectControls: React.FC<SelectControlsProps> = ({
+  arrLength,
+  index,
+  prevButton,
+  nextButton,
+}) => {
+  const toPaddedString = (value: number) => {
+    return String(value).padStart(2, "0");
+  };
 
-    const toPaddedString = (value: number) => {
-      return String(value).padStart(2, "0");
-    };
-  
-    function CurrentList() {
-      return `${toPaddedString(currentYear + 1)}/${toPaddedString(YEARS.length)}`;
-    }
-    
+  function CurrentList() {
+    return `${toPaddedString(index + 1)}/${toPaddedString(arrLength)}`;
+  }
+
   return (
     <div>
       <div className={style.current__list}>
@@ -29,12 +30,12 @@ export const SelectControls: React.FC<SelectControlsProps> = ({prevButton, nextB
         <SelectButton
           icon={<LeftArrowIcon />}
           onClick={prevButton}
-          disabled={currentYear === 0}
+          disabled={index === 0}
         />
         <SelectButton
           icon={<RightArrowIcon />}
           onClick={nextButton}
-          disabled={currentYear === YEARS.length - 1}
+          disabled={index === arrLength - 1}
         />
       </div>
     </div>

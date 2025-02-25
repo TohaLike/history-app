@@ -96,8 +96,7 @@
     height: 10px;
     border-radius: 50%;
     cursor: pointer;
-    border: 1px solid #42567a;
-    background-color: transparent;
+    background-color: #42567A50;
   }
 
   .active {
@@ -105,7 +104,7 @@
     height: 10px;
     border-radius: 50%;
     cursor: pointer;
-    border: 1px solid #42567a;
+    border: 1px solid #42567A;
     background-color: #42567a;
   }
 }
