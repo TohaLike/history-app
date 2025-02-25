@@ -6,7 +6,6 @@ import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 import { SelectControls } from "../SelectControls/SelectControls";
 
 import { YEARS } from "@/years";
-import { TypeBtn } from "@/types";
 
 gsap.registerPlugin(MotionPathPlugin);
 
@@ -20,22 +19,23 @@ export const SelectCategory: React.FC = () => {
   const [showText, setShowText] = useState<boolean>(true);
 
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const textRef = useRef<any[]>([]);
   const yearRef = useRef<HTMLDivElement>(null);
   const yearRefTwo = useRef<HTMLDivElement>(null);
-  const hoverRef = useRef<any[]>([]);
+  const circlesRef = useRef([]);
+  const itemsRef = useRef([]);
+  const textRef = useRef([]);
 
-  const itemsRef = useRef<any[]>([]);
   const tl = useRef(gsap.timeline({ paused: true, reversed: true }));
   const tracker = useRef({ item: 0 });
 
-  const lengthOfItems = 6;
-
   const numItems = 6;
+  const itemStep = 1 / numItems;
   const wrapTracker = gsap.utils.wrap(0, numItems);
+  const wrapProgress = gsap.utils.wrap(0, 1);
+  const snap = gsap.utils.snap(itemStep);
 
   const openCircle = (index: number) => {
-    gsap.to(itemsRef.current[index], {
+    gsap.to(circlesRef.current[index], {
       width: 56,
       height: 56,
       backgroundColor: "#f4f5f9",
@@ -43,21 +43,36 @@ export const SelectCategory: React.FC = () => {
       borderRadius: 100,
       fontSize: "20px",
       borderWidth: 1,
-      duration: 0.3,
+      duration: 0.1,
       ease: "power1.out",
     });
   };
 
   const closedCircle = (index?: number) => {
-    gsap.to(itemsRef.current[index], {
-      width: 6,
-      height: 6,
-      borderWidth: 0,
-      backgroundColor: "#42567a",
-      fontSize: 0,
-      duration: 0.3,
+    gsap.to(circlesRef.current[index], {
+      duration: 0.1,
       ease: "power1.out",
+      onComplete: () =>
+        gsap.set(circlesRef.current[index], { clearProps: "all" }),
     });
+  };
+
+  const animateYear = (
+    ref: React.RefObject<HTMLSpanElement>,
+    oldYear: number,
+    newYear: number
+  ) => {
+    if (!ref.current) return;
+    gsap.fromTo(
+      ref.current,
+      { textContent: oldYear },
+      {
+        textContent: newYear,
+        duration: 0.8,
+        ease: "Power1.easeIn",
+        snap: { textContent: 1 },
+      }
+    );
   };
 
   useEffect(() => {
@@ -68,55 +83,37 @@ export const SelectCategory: React.FC = () => {
     circlePath.id = "circlePath";
     svg.prepend(circlePath);
 
-    if (!itemsRef.current) return;
-
     gsap.set(itemsRef.current, {
       motionPath: {
         path: circlePath,
         align: circlePath,
         alignOrigin: [0.5, 0.5],
-        end: (i: number) => i / numItems - 0.1666666666666667,
+        end: (i: number) => i / numItems - 0.1667,
       },
-      scale: 0.9,
     });
 
-    tl.current.to(wrapperRef.current, {
-      rotation: 360,
-      transformOrigin: "center",
-      duration: 1,
-      ease: "none",
-    });
-
-    tl.current.to(
-      itemsRef.current,
-      {
-        rotation: "-=360",
+    tl.current
+      .to(wrapperRef.current, {
+        rotation: 360,
         transformOrigin: "center",
         duration: 1,
         ease: "none",
-      },
-      0
-    );
-
-    gsap.set(itemsRef.current, {
-      width: 6,
-      height: 6,
-      borderWidth: 0,
-      backgroundColor: "#42567a",
-      fontSize: 0,
-      duration: 0.3,
-      ease: "power1.out",
-    });
+      })
+      .to(
+        itemsRef.current,
+        {
+          rotation: "-=360",
+          transformOrigin: "center",
+          duration: 1,
+          ease: "none",
+        },
+        0
+      );
 
     openCircle(tracker.current.item);
 
-    gsap.set(textRef.current, {
-      display: "none",
-    });
-
-    gsap.set(textRef.current[tracker.current.item], {
-      display: "block",
-    });
+    gsap.set(textRef.current, { display: "none" });
+    gsap.set(textRef.current[tracker.current.item], { display: "block" });
 
     tl.current.to(
       tracker.current,
@@ -134,59 +131,30 @@ export const SelectCategory: React.FC = () => {
     );
   }, []);
 
-  const yearAction = (yearRef: any, year: any, secondYear: any) => {
-    gsap.fromTo(
-      yearRef,
-      { textContent: year },
-      {
-        textContent: secondYear,
-        duration: 0.8,
-        ease: "Power1.easeIn",
-        snap: { textContent: 1 },
-        stagger: {
-          each: 1.0,
-        },
-      }
-    );
-  };
-
   const moveWheel = (amount: number) => {
-    if (!itemsRef.current) return;
-
     setIsCircleAnimationComplete(false);
     setThemeChanged(true);
     setShowText(false);
 
-    const numItems = itemsRef.current.length;
-    const itemStep = 1 / numItems;
-    const wrapProgress = gsap.utils.wrap(0, 1);
-    const snap = gsap.utils.snap(itemStep);
-
     let progress = tl.current.progress();
     tl.current.progress(wrapProgress(snap(tl.current.progress() + amount)));
-
     let next = tracker.current.item;
     tl.current.progress(progress);
 
     closedCircle(tracker.current.item);
     openCircle(next);
 
-    gsap.set(textRef.current[tracker.current.item], {
-      display: "none",
-    });
+    gsap.set(textRef.current, { display: "none" });
+    gsap.set(textRef.current[next], { display: "block" });
 
-    gsap.set(textRef.current[next], {
-      display: "block",
-    });
-
-    yearAction(
-      yearRef.current,
+    animateYear(
+      yearRef,
       YEARS[currentYear].data[0].year,
       YEARS[next].data[0].year
     );
 
-    yearAction(
-      yearRefTwo.current,
+    animateYear(
+      yearRefTwo,
       YEARS[currentYear].data[YEARS[currentYear].data.length - 1].year,
       YEARS[next].data[YEARS[currentYear].data.length - 1].year
     );
@@ -207,25 +175,15 @@ export const SelectCategory: React.FC = () => {
     });
   };
 
-  function moveItem(targetIndex: number) {
-    let current = tracker.current.item;
-    if (targetIndex === current) return;
-
-    closedCircle(targetIndex);
-
-    let diff = current - targetIndex;
-
-    if (Math.abs(diff) < numItems / 2) {
-      moveWheel((diff * 1) / (itemsRef.current?.length || 1));
-    } else {
-      let amt = numItems - Math.abs(diff);
-      if (current > targetIndex) {
-        moveWheel((amt * -1) / (itemsRef.current?.length || 1));
-      } else {
-        moveWheel((amt * 1) / (itemsRef.current?.length || 1));
-      }
-    }
-  }
+  const moveItem = (targetIndex: number) => {
+    if (tracker.current.item === targetIndex) return;
+    const diff = tracker.current.item - targetIndex;
+    moveWheel(
+      Math.abs(diff) < numItems / 2
+        ? diff / numItems
+        : ((numItems - Math.abs(diff)) / numItems) * (diff > 0 ? -1 : 1)
+    );
+  };
 
   const handleNext = () => moveWheel(-1 / (itemsRef.current?.length || 1));
   const handlePrev = () => moveWheel(1 / (itemsRef.current?.length || 1));
@@ -245,24 +203,19 @@ export const SelectCategory: React.FC = () => {
         <div className={style.circular__carousel}>
           <div className={style.wrapper} ref={wrapperRef}>
             <div className={style.items}>
-              {[...Array(lengthOfItems)].map((_, i) => (
+              {Array.from({ length: numItems }).map((_, i) => (
                 <div
                   key={`circle-item-${i}`}
                   onClick={() => moveItem(i)}
-                  // onMouseEnter={() => openCircle(i)}
-                  // onMouseLeave={() => closedCircle(i)}
                   className={style.item}
-                  ref={(el) => {
-                    if (el) itemsRef.current[i] = el;
-                  }}
+                  ref={(el: any) => (itemsRef.current[i] = el)}
                 >
-                  <div className={style.item__content}>
+                  <div
+                    className={style.item__content}
+                    ref={(el: any) => (circlesRef.current[i] = el)}
+                  >
                     <span>{i + 1}</span>
-                    <p
-                      ref={(el) => {
-                        if (el) textRef.current[i] = el;
-                      }}
-                    >
+                    <p ref={(el: any) => (textRef.current[i] = el)}>
                       {YEARS[currentYear].category}
                     </p>
                   </div>
@@ -273,7 +226,7 @@ export const SelectCategory: React.FC = () => {
             <svg viewBox="0 0 300 300">
               <circle
                 id="holder"
-                className={style.st}
+                className={style.circle}
                 cx="151"
                 cy="151"
                 r="150"
