@@ -16,14 +16,12 @@ export const SelectCategory: React.FC = () => {
     setThemeChanged,
     setIsCircleAnimationComplete,
   } = useContext(AppContext);
-  const [showText, setShowText] = useState<boolean>(true);
-
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<any[]>([]);
   const yearRef = useRef<HTMLDivElement>(null);
   const yearRefTwo = useRef<HTMLDivElement>(null);
-  const circlesRef = useRef([]);
-  const itemsRef = useRef([]);
-  const textRef = useRef([]);
+  const circlesRef = useRef<HTMLDivElement[]>([]);
+  const itemsRef = useRef<HTMLDivElement[]>([]);
 
   const tl = useRef(gsap.timeline({ paused: true, reversed: true }));
   const tracker = useRef({ item: 0 });
@@ -132,9 +130,10 @@ export const SelectCategory: React.FC = () => {
   }, []);
 
   const moveWheel = (amount: number) => {
+    if (!itemsRef.current) return;
+
     setIsCircleAnimationComplete(false);
     setThemeChanged(true);
-    setShowText(false);
 
     let progress = tl.current.progress();
     tl.current.progress(wrapProgress(snap(tl.current.progress() + amount)));
@@ -170,7 +169,6 @@ export const SelectCategory: React.FC = () => {
       onComplete: () => {
         setIsCircleAnimationComplete(true);
         setThemeChanged(false);
-        setShowText(true);
       },
     });
   };
@@ -201,6 +199,7 @@ export const SelectCategory: React.FC = () => {
         </div>
 
         <div className={style.circular__carousel}>
+
           <div className={style.wrapper} ref={wrapperRef}>
             <div className={style.items}>
               {Array.from({ length: numItems }).map((_, i) => (

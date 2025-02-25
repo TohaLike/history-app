@@ -1,16 +1,8 @@
-.circular__container {
-  height: 460px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .year {
   &__container {
     display: flex;
     gap: 100px;
   }
-
   &__container span {
     font-weight: 700;
     font-size: 200px;
@@ -25,15 +17,19 @@
   }
 }
 
+.circular__container {
+  height: 460px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
 .circular__carousel {
   position: absolute;
   left: 50%;
   transform: translate(-50%, 0);
-  top: 215px;
-}
-
-.wrapper {
-  position: relative;
+  top: 0px;
 }
 
 .item {
