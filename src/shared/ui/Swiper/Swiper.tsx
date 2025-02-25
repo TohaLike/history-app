@@ -8,7 +8,7 @@ import { SwiperButton } from "../SwiperButton/SwiperButton";
 import { SelectControls } from "../SelectControls/SelectControls";
 import { Pagination } from "swiper/modules";
 import { AppContext } from "@/app/App";
-import { motion } from "framer-motion";
+import gsap from "gsap";
 import "swiper/css";
 import "swiper/css/pagination";
 
@@ -29,6 +29,7 @@ export const Swiper: React.FC = () => {
   const [paginationEnabled, setPaginationEnabled] = useState<boolean>(false);
   const [activeIndex, setActiveIndex] = useState<number>(0);
 
+  const containerRef = useRef<HTMLDivElement>(null);
   const swiperRef = useRef<SwiperRef>(null);
 
   const nextSlide = () => {
@@ -72,6 +73,7 @@ export const Swiper: React.FC = () => {
     };
 
     handleResize();
+
     window.addEventListener("resize", handleResize);
 
     return () => window.removeEventListener("resize", handleResize);
@@ -79,14 +81,17 @@ export const Swiper: React.FC = () => {
 
   const swiperKey = `swiper-${paginationEnabled}`;
 
+  useEffect(() => {
+    gsap.fromTo(
+      containerRef.current,
+      { opacity: 0, y: 50 },
+      { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
+    );
+  }, [themeChanged]);
+
   return (
     <div>
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        key={themeChanged}
-      >
+      <div ref={containerRef}>
         <div className={style.swiper}>
           {isCircleAnimationComplete && (
             <div className={style.swiper__container}>
@@ -138,7 +143,7 @@ export const Swiper: React.FC = () => {
             </div>
           )}
         </div>
-      </motion.div>
+      </div>
 
       <div className={style.swiper__controls}>
         <SelectControls prevButton={prevCategory} nextButton={nextCategory} />
