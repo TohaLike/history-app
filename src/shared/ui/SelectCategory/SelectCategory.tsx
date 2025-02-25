@@ -4,6 +4,8 @@ import gsap from "gsap";
 import { AppContext } from "@/app/App";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 import { SelectControls } from "../SelectControls/SelectControls";
+import { animateYear, closedCircle, openCircle } from "@/shared/helpers/GsapHelpers";
+import { RefObject } from "@/types";
 
 import { YEARS } from "@/years";
 
@@ -17,11 +19,11 @@ export const SelectCategory: React.FC = () => {
     setIsCircleAnimationComplete,
   } = useContext(AppContext);
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const textRef = useRef<any[]>([]);
   const yearRef = useRef<HTMLDivElement>(null);
   const yearRefTwo = useRef<HTMLDivElement>(null);
-  const circlesRef = useRef<HTMLDivElement[]>([]);
-  const itemsRef = useRef<HTMLDivElement[]>([]);
+  const textRef = useRef<HTMLDivElement[]>([]);
+  const circlesRef = useRef<RefObject[]>([]);
+  const itemsRef = useRef<RefObject[]>([]);
 
   const tl = useRef(gsap.timeline({ paused: true, reversed: true }));
   const tracker = useRef({ item: 0 });
@@ -31,47 +33,6 @@ export const SelectCategory: React.FC = () => {
   const wrapTracker = gsap.utils.wrap(0, numItems);
   const wrapProgress = gsap.utils.wrap(0, 1);
   const snap = gsap.utils.snap(itemStep);
-
-  const openCircle = (index: number) => {
-    gsap.to(circlesRef.current[index], {
-      width: 56,
-      height: 56,
-      backgroundColor: "#f4f5f9",
-      border: "1px solid #42567a",
-      borderRadius: 100,
-      fontSize: "20px",
-      borderWidth: 1,
-      duration: 0.1,
-      ease: "power1.out",
-    });
-  };
-
-  const closedCircle = (index?: number) => {
-    gsap.to(circlesRef.current[index], {
-      duration: 0.1,
-      ease: "power1.out",
-      onComplete: () =>
-        gsap.set(circlesRef.current[index], { clearProps: "all" }),
-    });
-  };
-
-  const animateYear = (
-    ref: React.RefObject<HTMLSpanElement>,
-    oldYear: number,
-    newYear: number
-  ) => {
-    if (!ref.current) return;
-    gsap.fromTo(
-      ref.current,
-      { textContent: oldYear },
-      {
-        textContent: newYear,
-        duration: 0.8,
-        ease: "Power1.easeIn",
-        snap: { textContent: 1 },
-      }
-    );
-  };
 
   useEffect(() => {
     const svg = document.querySelector("svg");
@@ -108,7 +69,7 @@ export const SelectCategory: React.FC = () => {
         0
       );
 
-    openCircle(tracker.current.item);
+    openCircle(circlesRef.current[tracker.current.item]);
 
     gsap.set(textRef.current, { display: "none" });
     gsap.set(textRef.current[tracker.current.item], { display: "block" });
@@ -140,8 +101,8 @@ export const SelectCategory: React.FC = () => {
     let next = tracker.current.item;
     tl.current.progress(progress);
 
-    closedCircle(tracker.current.item);
-    openCircle(next);
+    closedCircle(circlesRef.current[tracker.current.item]);
+    openCircle(circlesRef.current[next]);
 
     gsap.set(textRef.current, { display: "none" });
     gsap.set(textRef.current[next], { display: "block" });
@@ -199,7 +160,6 @@ export const SelectCategory: React.FC = () => {
         </div>
 
         <div className={style.circular__carousel}>
-
           <div className={style.wrapper} ref={wrapperRef}>
             <div className={style.items}>
               {Array.from({ length: numItems }).map((_, i) => (
@@ -214,9 +174,9 @@ export const SelectCategory: React.FC = () => {
                     ref={(el: any) => (circlesRef.current[i] = el)}
                   >
                     <span>{i + 1}</span>
-                    <p ref={(el: any) => (textRef.current[i] = el)}>
+                    <h2 ref={(el: any) => (textRef.current[i] = el)}>
                       {YEARS[currentYear].category}
-                    </p>
+                    </h2>
                   </div>
                 </div>
               ))}

@@ -31,3 +31,6 @@ export interface SelectControlsProps {
   prevButton: TypeBtn;
   nextButton: TypeBtn;
 }
+
+
+export type RefObject = React.RefObject<HTMLSpanElement>
