@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import style from "./selectcategory.module.scss";
 import gsap from "gsap";
 import { AppContext } from "@/app/App";

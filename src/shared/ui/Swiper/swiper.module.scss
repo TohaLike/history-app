@@ -1,3 +1,7 @@
+.title {
+  display: none;
+}
+
 .swiper__container {
   margin: 56px 0 0;
   display: flex;
@@ -47,13 +51,18 @@
 }
 
 @media (max-width: 1090px) {
+  .title {
+    display: block;
+    padding: 0 0 50px;
+    border-bottom: 1px solid #c7cdd9;
+  }
+
   .swiper__container {
-    margin: 0;
+    margin: 20px 0 0;
   }
 
   .swiper {
-    height: 105px;
-    margin: 56px 0 0;
+    height: 205px;
   }
 
   .swiper__pagination {
@@ -85,7 +94,7 @@
     height: 10px;
     border-radius: 50%;
     cursor: pointer;
-    border: 1px solid #42567A;
+    border: 1px solid #42567a;
     background-color: transparent;
   }
 
@@ -94,7 +103,7 @@
     height: 10px;
     border-radius: 50%;
     cursor: pointer;
-    border: 1px solid #42567A;
-    background-color: #42567A;
+    border: 1px solid #42567a;
+    background-color: #42567a;
   }
 }

@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import style from "./swiper.module.scss";
 import { Swiper as MainSwiper, SwiperRef, SwiperSlide } from "swiper/react";
-import { Swiper as SwiperProps } from "swiper/types";
 import { SwiperItemProps } from "@/types";
 import { LeftArrowIcon, RightArrowIcon } from "@/shared/assets/icons";
 import { SwiperButton } from "../SwiperButton/SwiperButton";
@@ -83,7 +82,7 @@ export const Swiper: React.FC = () => {
   useEffect(() => {
     setIsBeginning(true);
     setIsEnd(false);
-    
+
     gsap.fromTo(
       containerRef.current,
       { opacity: 0, y: 50 },
@@ -92,65 +91,69 @@ export const Swiper: React.FC = () => {
   }, [themeChanged]);
 
   return (
-    <div>
+    <>
       <div ref={containerRef}>
         <div className={style.swiper}>
           {isCircleAnimationComplete && (
-            <div className={style.swiper__container}>
+            <div>
 
-              {!isBeginning && (
-                <div className={style.button__prev}>
-                  <SwiperButton
-                    onClick={prevSlide}
-                    icon={<LeftArrowIcon />}
-                    disabled={isBeginning}
-                  />
-                </div>
-              )}
+              <h2 className={style.title}>{YEARS[currentYear].category}</h2>
 
-              <MainSwiper
-                key={swiperKey}
-                ref={swiperRef}
-                slidesPerView={"auto"}
-                spaceBetween={30}
-                modules={[Pagination]}
-                pagination={{ el: null }}
-                onSlideChange={(swiper) => {
-                  setActiveIndex(swiper.activeIndex);
-                  setIsBeginning(swiper.isBeginning);
-                  setIsEnd(swiper.isEnd);
-                }}
-                breakpoints={{
-                  1090: {
-                    spaceBetween: 80,
-                  },
-                }}
-              >
-                {YEARS[currentYear].data.map(
-                  (e: SwiperItemProps, i: number) => (
-                    <SwiperSlide
-                      key={`slide-${i}`}
-                      style={{ maxWidth: "320px" }}
-                      className={style.swiper__slide}
-                    >
-                      <h2 className={style.swiper__year}>{e.year}</h2>
-                      <p className={style.swiper__description}>
-                        {e.description}
-                      </p>
-                    </SwiperSlide>
-                  )
+              <div className={style.swiper__container}>
+                {!isBeginning && (
+                  <div className={style.button__prev}>
+                    <SwiperButton
+                      onClick={prevSlide}
+                      icon={<LeftArrowIcon />}
+                      disabled={isBeginning}
+                    />
+                  </div>
                 )}
-              </MainSwiper>
 
-              {!isEnd && (
-                <div className={style.button__next}>
-                  <SwiperButton
-                    onClick={nextSlide}
-                    icon={<RightArrowIcon />}
-                    disabled={isEnd}
-                  />
-                </div>
-              )}
+                <MainSwiper
+                  key={swiperKey}
+                  ref={swiperRef}
+                  slidesPerView={"auto"}
+                  spaceBetween={30}
+                  modules={[Pagination]}
+                  pagination={{ el: null }}
+                  onSlideChange={(swiper) => {
+                    setActiveIndex(swiper.activeIndex);
+                    setIsBeginning(swiper.isBeginning);
+                    setIsEnd(swiper.isEnd);
+                  }}
+                  breakpoints={{
+                    1090: {
+                      spaceBetween: 80,
+                    },
+                  }}
+                >
+                  {YEARS[currentYear].data.map(
+                    (e: SwiperItemProps, i: number) => (
+                      <SwiperSlide
+                        key={`slide-${i}`}
+                        style={{ maxWidth: "320px" }}
+                        className={style.swiper__slide}
+                      >
+                        <h2 className={style.swiper__year}>{e.year}</h2>
+                        <p className={style.swiper__description}>
+                          {e.description}
+                        </p>
+                      </SwiperSlide>
+                    )
+                  )}
+                </MainSwiper>
+
+                {!isEnd && (
+                  <div className={style.button__next}>
+                    <SwiperButton
+                      onClick={nextSlide}
+                      icon={<RightArrowIcon />}
+                      disabled={isEnd}
+                    />
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </div>
@@ -168,6 +171,6 @@ export const Swiper: React.FC = () => {
           ))}
         </div>
       </div>
-    </div>
+    </>
   );
 };
