@@ -5,9 +5,7 @@ export interface SwiperItemProps {
   description: string;
 }
 
-export type TypeBtn = (
-  value: React.MouseEvent<HTMLButtonElement, MouseEvent>
-) => void;
+export type TypeBtn = (value: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 
 export interface ButtonProps {
   onClick: TypeBtn;
@@ -42,11 +40,12 @@ export interface SelectControlsProps {
 export interface SwiperProps {
   array: any;
   currentYear: number;
-  themeChanged: boolean;
-  isCircleAnimationComplete: boolean;
-  setCurrentYear: StateType<number>;
-  setThemeChanged: StateType<boolean>;
-  setIsCircleAnimationComplete: StateType<boolean>;
+}
+
+export interface PaginationProps {
+  array: any;
+  currentIndex: number;
+  handleChange: (value: number) => void;
 }
 
 export type RefObject = React.RefObject<HTMLSpanElement>;

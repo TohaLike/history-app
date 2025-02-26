@@ -1,20 +1,20 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import style from "./selectcategory.module.scss";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 import { SelectControls } from "../SelectControls/SelectControls";
 import { animateYear, closedCircle, openCircle } from "@/shared/untils/GsapUntils";
-import { RefObject, SelectCategoryProps } from "@/types";
+import { RefObject } from "@/types";
+import { Swiper } from "../Swiper/Swiper";
+import { Pagination } from "../Pagination/Pagination";
 import gsap from "gsap";
 
 gsap.registerPlugin(MotionPathPlugin);
 
-export const SelectCategory: React.FC<SelectCategoryProps> = ({
-  array,
-  currentYear,
-  setCurrentYear,
-  setThemeChanged,
-  setIsCircleAnimationComplete,
-}) => {
+export const SelectCategory: React.FC<any> = ({ array }) => {
+  const [currentYear, setCurrentYear] = useState<number>(0);
+  const [themeChanged, setThemeChanged] = useState<boolean>(false);
+  const [animationComplete, setAnimationComplete] = useState<boolean>(true);
+
   const wrapperRef = useRef<HTMLDivElement>(null);
   const yearRef = useRef<HTMLDivElement>(null);
   const yearRefTwo = useRef<HTMLDivElement>(null);
@@ -24,6 +24,8 @@ export const SelectCategory: React.FC<SelectCategoryProps> = ({
 
   const tl = useRef(gsap.timeline({ paused: true, reversed: true }));
   const tracker = useRef({ item: 0 });
+
+  const swiperRef = useRef<HTMLDivElement>(null);
 
   const numItems = array ? array.length : 0;
   const itemStep = 1 / numItems;
@@ -87,10 +89,18 @@ export const SelectCategory: React.FC<SelectCategoryProps> = ({
     );
   }, []);
 
+  useEffect(() => {
+    gsap.fromTo(
+      swiperRef.current,
+      { opacity: 0, y: 50 },
+      { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
+    );
+  }, [themeChanged]);
+
   const moveWheel = (amount: number) => {
     if (!itemsRef.current) return;
 
-    setIsCircleAnimationComplete(false);
+    setAnimationComplete(false);
     setThemeChanged(true);
 
     let progress = tl.current.progress();
@@ -125,7 +135,7 @@ export const SelectCategory: React.FC<SelectCategoryProps> = ({
         setCurrentYear(next);
       },
       onComplete: () => {
-        setIsCircleAnimationComplete(true);
+        setAnimationComplete(true);
         setThemeChanged(false);
       },
     });
@@ -192,13 +202,34 @@ export const SelectCategory: React.FC<SelectCategoryProps> = ({
         </div>
       </div>
 
-      <div className={style.controls}>
-        <SelectControls
-          arrLength={array.length}
-          index={currentYear}
-          prevButton={handlePrev}
-          nextButton={handleNext}
-        />
+      <div className={style.swiper}>
+        <div className={style.swiper__controls}>
+          <SelectControls
+            arrLength={array.length}
+            index={currentYear}
+            prevButton={handlePrev}
+            nextButton={handleNext}
+          />
+
+          <div className={style.swiper__pagination}>
+            <Pagination
+              array={array}
+              currentIndex={currentYear}
+              handleChange={moveItem}
+            />
+          </div>
+        </div>
+
+        <div ref={swiperRef} className={style.swiper__container}>
+          {animationComplete && (
+            <div>
+              <div className={style.swiper__title}>
+                <h2>{array[currentYear].category}</h2>
+              </div>
+              <Swiper array={array} currentYear={currentYear} />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

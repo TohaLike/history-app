@@ -9,15 +9,11 @@ export const SwiperItem: React.FC<SwiperItemProps> = ({
   description,
 }) => {
   return (
-    <>
-      <SwiperSlide>
-        <div className={style.swiper__slide}>
-          <h2 className={style.swiper__year}>{year || "Год"}</h2>
-          <p className={style.swiper__description}>
-            {description || "Описание"}
-          </p>
-        </div>
-      </SwiperSlide>
-    </>
+    <SwiperSlide style={{ maxWidth: "320px" }}>
+      <div className={style.swiper__slide}>
+        <h2 className={style.swiper__year}>{year || "Год"}</h2>
+        <p className={style.swiper__description}>{description || "Описание"}</p>
+      </div>
+    </SwiperSlide>
   );
 };

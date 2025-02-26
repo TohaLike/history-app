@@ -1,7 +1,3 @@
-.title {
-  display: none;
-}
-
 .swiper__container {
   margin: 56px 0 0;
   display: flex;
@@ -25,11 +21,6 @@
   line-height: 30px;
 }
 
-.swiper__pagination {
-  margin: 100px 0 0;
-  display: none;
-}
-
 .button {
   &__prev {
     position: absolute;
@@ -51,22 +42,8 @@
 }
 
 @media (max-width: 1090px) {
-  .title {
-    display: block;
-    padding: 0 0 50px;
-    border-bottom: 1px solid #c7cdd9;
-  }
-
   .swiper__container {
     margin: 20px 0 0;
-  }
-
-  .swiper {
-    height: 205px;
-  }
-
-  .swiper__pagination {
-    display: block;
   }
 
   .button {
@@ -76,35 +53,5 @@
     &__next {
       display: none;
     }
-  }
-
-  .swiper__controls {
-    margin-top: 78px;
-    display: flex;
-    gap: 40px;
-  }
-
-  .custom__pagination {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-  }
-
-  .dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    cursor: pointer;
-    background-color: #42567A50;
-  }
-
-  .active {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    cursor: pointer;
-    border: 1px solid #42567A;
-    background-color: #42567a;
   }
 }

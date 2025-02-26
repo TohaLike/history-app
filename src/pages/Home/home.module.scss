@@ -52,16 +52,16 @@
   padding: 0 76px;
 }
 
-.select__container::before {
-  content: "";
-  position: absolute;
-  top: 48.5%;
-  left: 0;
-  transform: translate(0, -50%);
-  width: 100%;
-  height: 1px;
-  background-color: #42567a30;
-}
+// .select__container::before {
+//   content: "";
+//   position: absolute;
+//   top: 48.5%;
+//   left: 0;
+//   transform: translate(0, -50%);
+//   width: 100%;
+//   height: 1px;
+//   background-color: #42567a30;
+// }
 
 .swiper__container {
   padding: 0 76px;

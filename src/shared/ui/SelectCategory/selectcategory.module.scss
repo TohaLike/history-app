@@ -107,6 +107,15 @@ svg {
   stroke-miterlimit: 1;
 }
 
+.swiper {
+  &__title {
+    display: none;
+  }
+  &__pagination {
+    display: none;
+  }
+}
+
 @media (max-width: 1090px) {
   .circular__carousel {
     display: none;
@@ -130,11 +139,34 @@ svg {
     }
   }
 
-  .current__list {
-    display: none;
+  .controls {
+    display: flex;
+    flex-direction: column-reverse;
   }
 
-  .controls {
-    display: none;
+  .swiper {
+    display: flex;
+    flex-direction: column-reverse;
+
+    &__title {
+      display: block;
+      border-bottom: 1px solid #C7CDD9;
+      padding: 0 0 50px;
+    }
+
+    &__controls {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      margin: 78px 0 0;
+    }
+
+    &__pagination {
+      display: block;
+    }
+
+    &__container {
+      height: 205px;
+    }
   }
 }
