@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import style from "./home.module.scss";
-import { SelectCategory, Swiper } from "@/shared/ui";
+import { SelectCategory } from "@/shared/ui";
 import { YEARS } from "@/years";
 
 const Home: React.FC = () => {

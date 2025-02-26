@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import style from "./selectcategory.module.scss";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 import { SelectControls } from "../SelectControls/SelectControls";
@@ -6,6 +6,7 @@ import { animateYear, closedCircle, openCircle } from "@/shared/untils/GsapUntil
 import { RefObject } from "@/types";
 import { Swiper } from "../Swiper/Swiper";
 import { Pagination } from "../Pagination/Pagination";
+import { CircularItem } from "../CircularItem/CircularItem";
 import gsap from "gsap";
 
 gsap.registerPlugin(MotionPathPlugin);
@@ -155,8 +156,8 @@ export const SelectCategory: React.FC<any> = ({ array }) => {
   const handlePrev = () => moveWheel(1 / (itemsRef.current?.length || 1));
 
   return (
-    <div>
-      <div className={style.circular__container}>
+    <>
+      <div className={style.select__container}>
         <div className={style.year__container}>
           <span className={style.year__first} ref={yearRef}>
             {array[currentYear].data[0].year}
@@ -172,27 +173,24 @@ export const SelectCategory: React.FC<any> = ({ array }) => {
               {Array.from({ length: numItems }).map((_, i) => (
                 <div
                   key={`circle-item-${i}`}
-                  onClick={() => moveItem(i)}
                   className={style.item}
                   ref={(el: any) => (itemsRef.current[i] = el)}
+                  onClick={() => moveItem(i)}
                 >
-                  <div
-                    className={style.item__content}
-                    ref={(el: any) => (circlesRef.current[i] = el)}
-                  >
-                    <span>{i + 1}</span>
-                    <h2 ref={(el: any) => (textRef.current[i] = el)}>
-                      {array[currentYear].category}
-                    </h2>
-                  </div>
+                  <CircularItem
+                    itemIndex={i}
+                    title={array[i].category}
+                    circleRef={circlesRef}
+                    textRef={textRef}
+                  />
                 </div>
               ))}
             </div>
 
-            <svg viewBox="0 0 300 300">
+            <svg className={style.svg} viewBox="0 0 300 300">
               <circle
                 id="holder"
-                className={style.circle}
+                className={style.svg__circle}
                 cx="151"
                 cy="151"
                 r="150"
@@ -231,6 +229,6 @@ export const SelectCategory: React.FC<any> = ({ array }) => {
           )}
         </div>
       </div>
-    </div>
+    </>
   );
 };
