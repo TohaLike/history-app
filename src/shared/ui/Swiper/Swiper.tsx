@@ -4,6 +4,7 @@ import { Swiper as MainSwiper, SwiperRef, SwiperSlide } from "swiper/react";
 import { SwiperItemProps, SwiperProps } from "@/types";
 import { LeftArrowIcon, RightArrowIcon } from "@/shared/assets/icons";
 import { SwiperButton } from "../SwiperButton/SwiperButton";
+import "swiper/css";
 
 export const Swiper: React.FC<SwiperProps> = ({ array, currentYear }) => {
   const [isEnd, setIsEnd] = useState<boolean>(false);
